@@ -157,15 +157,9 @@ void TcpServer::handleIncomingData(fd_set* fds)
                 LOG_DEBUG("Client closed connection");
                 connection->close();
             } else {
-                LOG_DEBUG("[" << std::string((char*)rawBuffer, bytesRead) << "]");
-
                 StreamBuffer buffer;
-                LOG_DEBUG("buffer.size()=" << buffer.size());
                 buffer.put(rawBuffer, bytesRead);
-                LOG_DEBUG("buffer.size()=" << buffer.size());
-                bzero(rawBuffer, sizeof(rawBuffer));
-                bytesRead = buffer.get(rawBuffer, sizeof(rawBuffer));
-                LOG_DEBUG("[" << std::string((char*)rawBuffer, bytesRead) << "], bytesRead=" << bytesRead << ", buffer.size()=" << buffer.size());
+                connection->handleIncomingData(buffer);
             }
         }
     }

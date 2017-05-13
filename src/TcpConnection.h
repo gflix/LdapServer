@@ -11,6 +11,7 @@
 #include <list>
 #include <memory>
 #include <string>
+#include <StreamBuffer.h>
 
 namespace Flix {
 
@@ -25,6 +26,7 @@ public:
 
     bool close(void);
     bool isOpened(void) const;
+    void handleIncomingData(const StreamBuffer& stream);
 
 private:
     int connectionSocket;
@@ -32,6 +34,7 @@ private:
     int port;
 
     bool opened;
+    StreamBuffer inputStream;
 };
 
 typedef std::shared_ptr<TcpConnection> TcpConnectionPointer;

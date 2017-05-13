@@ -59,4 +59,14 @@ bool TcpConnection::isOpened(void) const
     return opened;
 }
 
+void TcpConnection::handleIncomingData(const StreamBuffer& stream)
+{
+    if (!isOpened()) {
+        return;
+    }
+
+    inputStream.insert(inputStream.end(), stream.cbegin(), stream.cend());
+    LOG_DEBUG("stream.size()=" << stream.size() << ", inputStream.size()=" << inputStream.size());
+}
+
 } /* namespace Flix */
