@@ -43,9 +43,14 @@ std::string BindRequestOperation::dump(void) const
 
     dumpedOperation << "BindRequestOperation(protocolVersion=" <<
         protocolVersion << ", authenticationDn=" << authenticationDn <<
-        ", password=***";
+        ", password=***)";
 
     return dumpedOperation.str();
+}
+
+StreamBuffer BindRequestOperation::getBuffer(void) const
+{
+    return {};
 }
 
 void BindRequestOperation::setProtocolVersion(int protocolVersion)

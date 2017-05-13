@@ -22,7 +22,9 @@ public:
 
     int getMessageId(void) const;
     GenericOperation* getOperation(void) const;
+    bool isOperationType(OperationType requestedType) const;
     std::string dump(void) const;
+    StreamBuffer getBuffer(void) const;
 
     void setMessageId(int messageId);
     void setOperation(GenericOperation* operation);

@@ -34,6 +34,14 @@ GenericOperation* LdapMessage::getOperation(void) const
     return operation;
 }
 
+bool LdapMessage::isOperationType(OperationType requestedType) const
+{
+    if (!operation) {
+        return false;
+    }
+    return operation->isType(requestedType);
+}
+
 std::string LdapMessage::dump(void) const
 {
     std::stringstream dumpedMessage;
@@ -48,6 +56,25 @@ std::string LdapMessage::dump(void) const
     dumpedMessage << ")";
 
     return dumpedMessage.str();
+}
+
+StreamBuffer LdapMessage::getBuffer(void) const
+{
+    StreamBuffer payloadBuffer;
+    payloadBuffer.push_back(0x02);
+    payloadBuffer.push_back(0x01);
+    payloadBuffer.push_back((unsigned char) messageId);
+    if (operation) {
+        payloadBuffer.push_back(operation->getBuffer());
+    }
+
+    StreamBuffer pduBuffer;
+    pduBuffer.push_back(0x30);
+    pduBuffer.push_back(payloadBuffer.size());
+
+    pduBuffer.push_back(payloadBuffer);
+
+    return pduBuffer;
 }
 
 void LdapMessage::setMessageId(int messageId)

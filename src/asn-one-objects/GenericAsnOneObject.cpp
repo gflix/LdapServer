@@ -28,7 +28,8 @@
 #define PDU_TYPE_UNIVERSAL_OCTET_STRING (4)
 #define PDU_TYPE_UNIVERSAL_SEQUENCE (16)
 
-#define PDU_TYPE_APPLICATION_LDAP_BIND (0)
+#define PDU_TYPE_APPLICATION_LDAP_BIND_REQUEST (0)
+#define PDU_TYPE_APPLICATION_LDAP_BIND_RESPONSE (1)
 
 #define PDU_TYPE_CONTEXT_LDAP_BIND_CREDENTIAL (0)
 
@@ -158,7 +159,7 @@ GenericAsnOneObject* GenericAsnOneObject::decode(const StreamBuffer& buffer, ssi
             asnOneObject = OctetStringAsnOneObject::decode(subsetBuffer, decodeStatus);
         }
     } else if (pduClass == PDU_CLASS_APPLICATION) {
-        if (pduCombinedFlag && pduType == PDU_TYPE_APPLICATION_LDAP_BIND) {
+        if (pduCombinedFlag && pduType == PDU_TYPE_APPLICATION_LDAP_BIND_REQUEST) {
             asnOneObject = LdapBindAsnOneObject::decode(subsetBuffer, decodeStatus);
         }
     } else if (pduClass == PDU_CLASS_CONTEXT) {

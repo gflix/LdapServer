@@ -8,6 +8,8 @@ libldap_la_SOURCES = \
 	GenericOperation.h \
 	BindRequestOperation.cpp \
 	BindRequestOperation.h \
+	BindResponseOperation.cpp \
+	BindResponseOperation.h \
     LdapMessage.cpp \
     LdapMessage.h
 

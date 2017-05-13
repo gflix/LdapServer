@@ -21,6 +21,8 @@ public:
 
     ssize_t put(unsigned char* data, size_t elements);
     ssize_t get(unsigned char* data, size_t elements);
+    void push_back(const StreamBuffer& elements);
+    void push_back(unsigned char value);
 };
 
 } /* namespace Flix */

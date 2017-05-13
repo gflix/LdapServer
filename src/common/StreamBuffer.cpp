@@ -30,7 +30,7 @@ ssize_t StreamBuffer::put(unsigned char* data, size_t elements)
 
     ssize_t elementsWritten = 0;
     while (elements > 0) {
-        push_back(*data);
+        std::vector<unsigned char>::push_back(*data);
         ++data;
         --elements;
         ++elementsWritten;
@@ -56,6 +56,16 @@ ssize_t StreamBuffer::get(unsigned char* data, size_t elements)
     erase(begin(), element);
 
     return elementsRetreived;
+}
+
+void StreamBuffer::push_back(const StreamBuffer& elements)
+{
+    insert(this->end(), elements.cbegin(), elements.cend());
+}
+
+void StreamBuffer::push_back(unsigned char value)
+{
+    std::vector<unsigned char>::push_back(value);
 }
 
 } /* namespace Flix */
