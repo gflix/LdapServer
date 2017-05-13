@@ -1,5 +1,6 @@
 #include <signal.h>
 #include <unistd.h>
+#include <Config.h>
 #include <common/Log.h>
 #include <network/TcpServer.h>
 
@@ -28,6 +29,7 @@ int main(int argc, char* argv[])
         return 1;
     }
 
+    LOG_INFO("Started " << PACKAGE_STRING);
     LOG_INFO("TCP server is running on port " << TCP_SERVER_PORT);
 
     while (!terminationFlag) {
@@ -42,8 +44,6 @@ int main(int argc, char* argv[])
 
         if (select(maxFileDescriptor + 1, &fds, nullptr, nullptr, &timeout) > 0) {
             tcpServer.handleIncomingData(&fds);
-        } else {
-            LOG_DEBUG("select() timed out.");
         }
     }
 
