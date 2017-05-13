@@ -29,7 +29,7 @@ bool LdapBindAsnOneObject::isValid(void) const
 
     if (subObjects[0]->getType() != AsnOneObjectType::INTEGER ||
         subObjects[1]->getType() != AsnOneObjectType::OCTET_STRING ||
-        subObjects[2]->getType() != AsnOneObjectType::INTEGER) {
+        subObjects[2]->getType() != AsnOneObjectType::OCTET_STRING) {
         return false;
     }
 
