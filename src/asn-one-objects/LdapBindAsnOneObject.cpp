@@ -5,7 +5,7 @@
  *      Author: felix
  */
 
-#include <LdapBindAsnOneObject.h>
+#include <asn-one-objects/LdapBindAsnOneObject.h>
 
 namespace Flix {
 

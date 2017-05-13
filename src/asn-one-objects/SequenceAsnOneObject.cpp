@@ -5,7 +5,7 @@
  *      Author: felix
  */
 
-#include <SequenceAsnOneObject.h>
+#include <asn-one-objects/SequenceAsnOneObject.h>
 
 namespace Flix {
 

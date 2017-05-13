@@ -11,12 +11,12 @@
 #include <unistd.h>
 #include <cassert>
 #include <cstring>
-#include <Log.h>
-#include <StreamBuffer.h>
-#include <TcpServer.h>
+#include <common/Log.h>
+#include <common/StreamBuffer.h>
+#include <network/TcpServer.h>
 
 #define SERVER_SOCKET_INVALID (-1)
-#define READ_BUFFER_SIZE (8)
+#define READ_BUFFER_SIZE (128)
 #define TCP_PORT_MIN (1)
 #define TCP_PORT_MAX (65535)
 
@@ -25,13 +25,11 @@ namespace Flix {
 TcpServer::TcpServer():
     serverSocket(SERVER_SOCKET_INVALID)
 {
-    LOG_DEBUG("TcpServer::TcpServer()");
 }
 
 TcpServer::~TcpServer()
 {
     stop();
-    LOG_DEBUG("TcpServer::~TcpServer()");
 }
 
 bool TcpServer::start(int port)
@@ -130,7 +128,7 @@ void TcpServer::handleIncomingData(fd_set* fds)
 
     if (FD_ISSET(serverSocket, fds)) {
         sockaddr_in clientAddress;
-        socklen_t clientAddressSize = 0;
+        socklen_t clientAddressSize = sizeof(clientAddress);
         char clientAddressBuffer[INET_ADDRSTRLEN];
 
         bzero(&clientAddress, sizeof(clientAddress));
@@ -151,7 +149,7 @@ void TcpServer::handleIncomingData(fd_set* fds)
         if (FD_ISSET(connectionSocket, fds)) {
             unsigned char rawBuffer[READ_BUFFER_SIZE];
             ssize_t bytesRead = recv(connectionSocket, rawBuffer, sizeof(rawBuffer), 0);
-            LOG_DEBUG("bytesRead=" << bytesRead);
+//            LOG_DEBUG("bytesRead=" << bytesRead);
 
             if (bytesRead <= 0) {
                 LOG_DEBUG("Client closed connection");

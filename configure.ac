@@ -11,8 +11,11 @@ AC_CONFIG_AUX_DIR([build-aux])
 AM_INIT_AUTOMAKE
 
 # Checks for programs.
+AM_PROG_AR
 AC_PROG_CXX
 AX_CXX_COMPILE_STDCXX_14()
+
+LT_INIT
 
 # Checks for libraries.
 
@@ -25,5 +28,8 @@ AX_CXX_COMPILE_STDCXX_14()
 AC_CONFIG_FILES([
     Makefile
     src/Makefile
+    src/asn-one-objects/Makefile
+    src/common/Makefile
+    src/network/Makefile
 ])
 AC_OUTPUT

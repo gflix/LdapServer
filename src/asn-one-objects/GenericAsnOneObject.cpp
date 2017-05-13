@@ -5,11 +5,11 @@
  *      Author: felix
  */
 
-#include <GenericAsnOneObject.h>
-#include <IntegerAsnOneObject.h>
-#include <LdapBindAsnOneObject.h>
-#include <Log.h>
-#include <SequenceAsnOneObject.h>
+#include <asn-one-objects/GenericAsnOneObject.h>
+#include <asn-one-objects/IntegerAsnOneObject.h>
+#include <asn-one-objects/LdapBindAsnOneObject.h>
+#include <asn-one-objects/SequenceAsnOneObject.h>
+#include <common/Log.h>
 
 #define LENGTH_LONG_FLAG (0x80)
 #define LENGTH_LONG_MASK (0x7f)

@@ -10,7 +10,7 @@
 
 #include <list>
 #include <ostream>
-#include <StreamBuffer.h>
+#include <common/StreamBuffer.h>
 
 namespace Flix {
 

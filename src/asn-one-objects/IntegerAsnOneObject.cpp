@@ -5,7 +5,7 @@
  *      Author: felix
  */
 
-#include <IntegerAsnOneObject.h>
+#include <asn-one-objects/IntegerAsnOneObject.h>
 
 namespace Flix {
 

@@ -6,7 +6,7 @@
  */
 
 #include <iostream>
-#include <Log.h>
+#include <common/Log.h>
 
 namespace Flix {
 

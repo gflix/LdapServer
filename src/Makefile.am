@@ -1,26 +1,20 @@
 AM_CPPFLAGS = \
     -I$(top_srcdir)/src
 
+SUBDIRS = \
+    asn-one-objects \
+    common \
+    network
+
 bin_PROGRAMS = ldap-server
 
 ldap_server_SOURCES = \
-    LdapServer.cpp \
-    GenericAsnOneObject.cpp \
-    GenericAsnOneObject.h \
-    IntegerAsnOneObject.cpp \
-    IntegerAsnOneObject.h \
-    LdapBindAsnOneObject.cpp \
-    LdapBindAsnOneObject.h \
-    Log.cpp \
-    Log.h \
-    SequenceAsnOneObject.cpp \
-    SequenceAsnOneObject.h \
-    StreamBuffer.cpp \
-    StreamBuffer.h \
-    TcpConnection.cpp \
-    TcpConnection.h \
-    TcpServer.cpp \
-    TcpServer.h
+    LdapServer.cpp
+
+ldap_server_LDADD = \
+    $(top_builddir)/src/network/libnetwork.la \
+    $(top_builddir)/src/asn-one-objects/libasn-one-objects.la \
+    $(top_builddir)/src/common/libcommon.la
 
 MAINTAINERCLEANFILES = \
     Config.h.in \

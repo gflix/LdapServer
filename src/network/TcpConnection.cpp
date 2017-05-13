@@ -6,9 +6,9 @@
  */
 
 #include <unistd.h>
-#include <GenericAsnOneObject.h>
-#include <Log.h>
-#include <TcpConnection.h>
+#include <asn-one-objects/GenericAsnOneObject.h>
+#include <common/Log.h>
+#include <network/TcpConnection.h>
 
 namespace Flix {
 
@@ -18,12 +18,11 @@ TcpConnection::TcpConnection(int connectionSocket, const std::string& peer, int 
     port(port)
 {
     opened = connectionSocket >= 0 ? true : false;
-    LOG_DEBUG("TcpConnection::TcpConnection(" << connectionSocket << ", " << peer << ":" << port << ")");
+    LOG_INFO("Accepted connection from " << peer << ":" << port);
 }
 
 TcpConnection::~TcpConnection()
 {
-    LOG_DEBUG("TcpConnection::~TcpConnection(" << connectionSocket << ")");
 }
 
 int TcpConnection::getConnectionSocket(void) const
@@ -46,8 +45,6 @@ bool TcpConnection::close(void)
     if (!isOpened()) {
         return false;
     }
-
-    LOG_DEBUG("TcpConnection::close(" << connectionSocket << ")");
 
     ::close(connectionSocket);
     opened = false;

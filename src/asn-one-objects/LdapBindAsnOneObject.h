@@ -8,7 +8,7 @@
 #ifndef SRC_LDAPBINDASNONEOBJECT_H_
 #define SRC_LDAPBINDASNONEOBJECT_H_
 
-#include <GenericAsnOneObject.h>
+#include <asn-one-objects/GenericAsnOneObject.h>
 
 namespace Flix {
 

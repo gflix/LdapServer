@@ -5,7 +5,7 @@
  *      Author: felix
  */
 
-#include <StreamBuffer.h>
+#include <common/StreamBuffer.h>
 
 namespace Flix {
 

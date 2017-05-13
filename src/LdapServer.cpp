@@ -1,7 +1,7 @@
 #include <signal.h>
 #include <unistd.h>
-#include <Log.h>
-#include <TcpServer.h>
+#include <common/Log.h>
+#include <network/TcpServer.h>
 
 using namespace std;
 

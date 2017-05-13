@@ -8,7 +8,7 @@
 #ifndef SRC_TCPSERVER_H_
 #define SRC_TCPSERVER_H_
 
-#include <TcpConnection.h>
+#include <network/TcpConnection.h>
 
 namespace Flix {
 
