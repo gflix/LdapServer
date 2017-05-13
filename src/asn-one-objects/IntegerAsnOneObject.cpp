@@ -27,7 +27,7 @@ int IntegerAsnOneObject::getValue(void) const
 
 void IntegerAsnOneObject::setValue(int value)
 {
-    LOG_DEBUG("IntegerAsnOneObject::setValue(" << value << ")");
+//    LOG_DEBUG("IntegerAsnOneObject::setValue(" << value << ")");
     this->value = value;
 }
 
@@ -48,10 +48,14 @@ IntegerAsnOneObject* IntegerAsnOneObject::decode(StreamBuffer buffer, AsnOneDeco
     return asnOneObject;
 }
 
+IntegerAsnOneObject* IntegerAsnOneObject::castObject(GenericAsnOneObject* object)
+{
+    return static_cast<IntegerAsnOneObject*>(object);
+}
 
 std::string IntegerAsnOneObject::dump(void) const
 {
-    return "Integer[" + std::to_string(value) + "]";
+    return "Integer(" + std::to_string(value) + ")";
 }
 
 } /* namespace Flix */

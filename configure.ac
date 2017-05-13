@@ -30,6 +30,7 @@ AC_CONFIG_FILES([
     src/Makefile
     src/asn-one-objects/Makefile
     src/common/Makefile
+    src/ldap/Makefile
     src/network/Makefile
 ])
 AC_OUTPUT

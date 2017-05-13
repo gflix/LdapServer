@@ -41,6 +41,9 @@ public:
     virtual ~GenericAsnOneObject();
 
     AsnOneObjectType getType(void) const;
+    bool isType(AsnOneObjectType requestedType) const;
+    int getSubObjectCount(void) const;
+    GenericAsnOneObject* getSubObject(int subObject) const;
     virtual std::string dump(void) const = 0;
 
     static GenericAsnOneObject* decode(const StreamBuffer& buffer, ssize_t& consumedBytes, AsnOneDecodeStatus& decodeStatus);

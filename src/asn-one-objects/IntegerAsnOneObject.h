@@ -20,6 +20,7 @@ public:
     int getValue(void) const;
 
     static IntegerAsnOneObject* decode(StreamBuffer buffer, AsnOneDecodeStatus& decodeStatus);
+    static IntegerAsnOneObject* castObject(GenericAsnOneObject* object);
 
 protected:
     std::string dump(void) const;

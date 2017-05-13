@@ -21,8 +21,6 @@ LdapBindAsnOneObject::~LdapBindAsnOneObject()
 
 bool LdapBindAsnOneObject::isValid(void) const
 {
-    LOG_DEBUG("subObject.size()=" << subObjects.size());
-
     if (subObjects.size() < 3) {
         return false;
     }
@@ -47,7 +45,6 @@ LdapBindAsnOneObject* LdapBindAsnOneObject::decode(StreamBuffer buffer, AsnOneDe
     }
 
     if (!asnOneObject->isValid()) {
-        LOG_ERROR("LdapBindAsnOneObject::decode(invalid)");
         decodeStatus = AsnOneDecodeStatus::INVALID_COMPOUND;
         delete asnOneObject;
         return nullptr;
@@ -56,11 +53,16 @@ LdapBindAsnOneObject* LdapBindAsnOneObject::decode(StreamBuffer buffer, AsnOneDe
     return asnOneObject;
 }
 
+LdapBindAsnOneObject* LdapBindAsnOneObject::castObject(GenericAsnOneObject* object)
+{
+    return static_cast<LdapBindAsnOneObject*>(object);
+}
+
 std::string LdapBindAsnOneObject::dump(void) const
 {
     std::string dumpedObject;
 
-    dumpedObject = "LdapBind[";
+    dumpedObject = "LdapBind{";
 
     bool firstObject = true;
     for (auto& subObject: subObjects) {
@@ -75,7 +77,7 @@ std::string LdapBindAsnOneObject::dump(void) const
         dumpedObject += subObject->dump();
     }
 
-    dumpedObject += ']';
+    dumpedObject += '}';
 
     return dumpedObject;
 }

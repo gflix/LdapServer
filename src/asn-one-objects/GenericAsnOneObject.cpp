@@ -55,6 +55,25 @@ AsnOneObjectType GenericAsnOneObject::getType(void) const
     return type;
 }
 
+bool GenericAsnOneObject::isType(AsnOneObjectType requestedType) const
+{
+    return type == requestedType;
+}
+
+int GenericAsnOneObject::getSubObjectCount(void) const
+{
+    return subObjects.size();
+}
+
+GenericAsnOneObject* GenericAsnOneObject::getSubObject(int subObject) const
+{
+    if (subObject >= subObjects.size()) {
+        return nullptr;
+    }
+
+    return subObjects[subObject];
+}
+
 bool GenericAsnOneObject::decodeSequence(StreamBuffer buffer, AsnOneDecodeStatus& decodeStatus)
 {
     decodeStatus = AsnOneDecodeStatus::OK;
@@ -126,7 +145,7 @@ GenericAsnOneObject* GenericAsnOneObject::decode(const StreamBuffer& buffer, ssi
     LOG_DEBUG("pduClass=" << pduClass << ", pduCombinedFlag=" << pduCombinedFlag << ", pduType=" << pduType);
 
     StreamBuffer subsetBuffer(buffer.cbegin() + alreadyConsumedBytes, buffer.cbegin() + alreadyConsumedBytes + length);
-    LOG_DEBUG("subsetBuffer.size()=" << subsetBuffer.size());
+//    LOG_DEBUG("subsetBuffer.size()=" << subsetBuffer.size());
     GenericAsnOneObject* asnOneObject = nullptr;
     decodeStatus = AsnOneDecodeStatus::INVALID_TAG;
 

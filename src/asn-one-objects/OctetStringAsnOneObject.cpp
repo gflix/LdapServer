@@ -26,7 +26,7 @@ const std::string& OctetStringAsnOneObject::getValue(void) const
 
 void OctetStringAsnOneObject::setValue(const std::string& value)
 {
-    LOG_DEBUG("OctetStringAsnOneObject::setValue(" << value << ")");
+//    LOG_DEBUG("OctetStringAsnOneObject::setValue(" << value << ")");
     this->value = value;
 }
 
@@ -47,10 +47,14 @@ OctetStringAsnOneObject* OctetStringAsnOneObject::decode(StreamBuffer buffer, As
     return asnOneObject;
 }
 
+OctetStringAsnOneObject* OctetStringAsnOneObject::castObject(GenericAsnOneObject* object)
+{
+    return static_cast<OctetStringAsnOneObject*>(object);
+}
 
 std::string OctetStringAsnOneObject::dump(void) const
 {
-    return "OctetString[" + value + "]";
+    return "OctetString(" + value + ")";
 }
 
 } /* namespace Flix */

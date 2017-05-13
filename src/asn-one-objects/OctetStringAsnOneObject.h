@@ -21,6 +21,7 @@ public:
     const std::string& getValue(void) const;
 
     static OctetStringAsnOneObject* decode(StreamBuffer buffer, AsnOneDecodeStatus& decodeStatus);
+    static OctetStringAsnOneObject* castObject(GenericAsnOneObject* object);
 
 protected:
     std::string dump(void) const;

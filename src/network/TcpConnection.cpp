@@ -8,6 +8,7 @@
 #include <unistd.h>
 #include <asn-one-objects/GenericAsnOneObject.h>
 #include <common/Log.h>
+#include <ldap/LdapMessage.h>
 #include <network/TcpConnection.h>
 
 namespace Flix {
@@ -84,8 +85,20 @@ void TcpConnection::handleIncomingData(const StreamBuffer& stream)
             }
         } else {
             LOG_DEBUG(*asnOneObject);
+
+            LdapMessage* ldapMessage = LdapMessage::fromAsnOneObject(asnOneObject);
             LOG_INFO("Cleaning up ASN.1 object...");
             delete asnOneObject;
+
+            if (ldapMessage) {
+                LOG_DEBUG(*ldapMessage);
+                LOG_INFO("Cleaning up LDAP message...");
+                delete ldapMessage;
+            } else {
+                LOG_ERROR("Could not decode LDAP message! Closing connection.");
+                close();
+                quitImmediately = true;
+            }
         }
         inputStream.erase(inputStream.begin(), inputStream.begin() + consumedBytes);
     }

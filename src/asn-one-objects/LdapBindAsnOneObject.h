@@ -20,6 +20,7 @@ public:
     bool isValid(void) const;
 
     static LdapBindAsnOneObject* decode(StreamBuffer buffer, AsnOneDecodeStatus& decodeStatus);
+    static LdapBindAsnOneObject* castObject(GenericAsnOneObject* object);
 
 protected:
     std::string dump(void) const;
