@@ -73,14 +73,13 @@ void TcpConnection::handleIncomingData(const StreamBuffer& stream)
 
         if (!asnOneObject) {
             switch (decodeStatus) {
-            case AsnOneDecodeStatus::INVALID_TAG:
-            case AsnOneDecodeStatus::NOT_SUPPORTED:
-            case AsnOneDecodeStatus::UNKNOWN:
+            case AsnOneDecodeStatus::OK:
+            case AsnOneDecodeStatus::INCOMPLETE:
+                break;
+            default:
                 LOG_NOTICE("Protocol error detected (" << decodeStatus << ")! Closing connection.");
                 close();
                 quitImmediately = true;
-                break;
-            default:
                 break;
             }
         } else {
