@@ -47,4 +47,10 @@ OctetStringAsnOneObject* OctetStringAsnOneObject::decode(StreamBuffer buffer, As
     return asnOneObject;
 }
 
+
+std::string OctetStringAsnOneObject::dump(void) const
+{
+    return "OctetString[" + value + "]";
+}
+
 } /* namespace Flix */

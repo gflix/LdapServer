@@ -31,4 +31,29 @@ SequenceAsnOneObject* SequenceAsnOneObject::decode(StreamBuffer buffer, AsnOneDe
     return asnOneObject;
 }
 
+
+std::string SequenceAsnOneObject::dump(void) const
+{
+    std::string dumpedObject;
+
+    dumpedObject = "Sequence[";
+
+    bool firstObject = true;
+    for (auto& subObject: subObjects) {
+        if (!subObject) {
+            continue;
+        }
+        if (firstObject) {
+            firstObject = false;
+        } else {
+            dumpedObject += ", ";
+        }
+        dumpedObject += subObject->dump();
+    }
+
+    dumpedObject += ']';
+
+    return dumpedObject;
+}
+
 } /* namespace Flix */

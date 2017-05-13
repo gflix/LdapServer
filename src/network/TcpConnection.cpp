@@ -83,6 +83,7 @@ void TcpConnection::handleIncomingData(const StreamBuffer& stream)
                 break;
             }
         } else {
+            LOG_DEBUG(*asnOneObject);
             LOG_INFO("Cleaning up ASN.1 object...");
             delete asnOneObject;
         }

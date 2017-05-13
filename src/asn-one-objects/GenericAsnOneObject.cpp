@@ -186,4 +186,10 @@ std::ostream& operator<<(std::ostream& stream, AsnOneDecodeStatus decodeStatus)
     return stream;
 }
 
+std::ostream& operator<<(std::ostream& stream, const GenericAsnOneObject& asnOneObject)
+{
+    stream << asnOneObject.dump();
+    return stream;
+}
+
 } /* namespace Flix */

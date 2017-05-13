@@ -20,6 +20,9 @@ public:
     bool isValid(void) const;
 
     static LdapBindAsnOneObject* decode(StreamBuffer buffer, AsnOneDecodeStatus& decodeStatus);
+
+protected:
+    std::string dump(void) const;
 };
 
 } /* namespace Flix */

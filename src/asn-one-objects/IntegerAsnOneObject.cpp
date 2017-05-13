@@ -48,4 +48,10 @@ IntegerAsnOneObject* IntegerAsnOneObject::decode(StreamBuffer buffer, AsnOneDeco
     return asnOneObject;
 }
 
+
+std::string IntegerAsnOneObject::dump(void) const
+{
+    return "Integer[" + std::to_string(value) + "]";
+}
+
 } /* namespace Flix */

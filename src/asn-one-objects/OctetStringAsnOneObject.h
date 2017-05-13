@@ -22,6 +22,9 @@ public:
 
     static OctetStringAsnOneObject* decode(StreamBuffer buffer, AsnOneDecodeStatus& decodeStatus);
 
+protected:
+    std::string dump(void) const;
+
 private:
     std::string value;
 

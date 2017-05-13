@@ -21,6 +21,9 @@ public:
 
     static IntegerAsnOneObject* decode(StreamBuffer buffer, AsnOneDecodeStatus& decodeStatus);
 
+protected:
+    std::string dump(void) const;
+
 private:
     int value;
 

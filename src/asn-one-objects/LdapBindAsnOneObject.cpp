@@ -56,4 +56,28 @@ LdapBindAsnOneObject* LdapBindAsnOneObject::decode(StreamBuffer buffer, AsnOneDe
     return asnOneObject;
 }
 
+std::string LdapBindAsnOneObject::dump(void) const
+{
+    std::string dumpedObject;
+
+    dumpedObject = "LdapBind[";
+
+    bool firstObject = true;
+    for (auto& subObject: subObjects) {
+        if (!subObject) {
+            continue;
+        }
+        if (firstObject) {
+            firstObject = false;
+        } else {
+            dumpedObject += ", ";
+        }
+        dumpedObject += subObject->dump();
+    }
+
+    dumpedObject += ']';
+
+    return dumpedObject;
+}
+
 } /* namespace Flix */

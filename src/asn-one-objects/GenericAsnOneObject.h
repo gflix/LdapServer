@@ -41,8 +41,10 @@ public:
     virtual ~GenericAsnOneObject();
 
     AsnOneObjectType getType(void) const;
+    virtual std::string dump(void) const = 0;
 
     static GenericAsnOneObject* decode(const StreamBuffer& buffer, ssize_t& consumedBytes, AsnOneDecodeStatus& decodeStatus);
+    friend std::ostream& operator<<(std::ostream& stream, const GenericAsnOneObject& asnOneObject);
 
 protected:
     AsnOneObjectType type;
