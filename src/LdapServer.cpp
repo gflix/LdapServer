@@ -1,6 +1,6 @@
 #include <signal.h>
 #include <unistd.h>
-#include <iostream>
+#include <Log.h>
 #include <TcpServer.h>
 
 using namespace std;
@@ -11,7 +11,7 @@ volatile bool terminationFlag = false;
 
 void handleTerminationRequest(int signal)
 {
-    cerr << "INFO: Caught signal " << signal << ". Stopping threads..." << endl;
+    LOG_NOTICE("Caught signal " << signal << ". Stopping threads...");
     terminationFlag = true;
 }
 
@@ -24,11 +24,11 @@ int main(int argc, char* argv[])
     signal(SIGHUP, &handleTerminationRequest);
 
     if (!tcpServer.start(TCP_SERVER_PORT)) {
-        cerr << "ERROR: Could not initialize TCP server! Aborting." << endl;
+        LOG_ERROR("Could not initialize TCP server! Aborting.");
         return 1;
     }
 
-    cout << "INFO: TCP server is running on port " << TCP_SERVER_PORT << endl;
+    LOG_INFO("TCP server is running on port " << TCP_SERVER_PORT);
 
     while (!terminationFlag) {
         fd_set fds;
@@ -43,12 +43,12 @@ int main(int argc, char* argv[])
         if (select(maxFileDescriptor + 1, &fds, nullptr, nullptr, &timeout) > 0) {
             tcpServer.handleIncomingData(&fds);
         } else {
-            cout << "INFO: select() timed out." << endl;
+            LOG_DEBUG("select() timed out.");
         }
     }
 
     if (!tcpServer.stop()) {
-        cerr << "ERROR: Could not stop TCP server! Aborting." << endl;
+        LOG_ERROR("Could not stop TCP server! Aborting.");
         return 1;
     }
 

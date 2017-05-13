@@ -6,14 +6,17 @@
  */
 
 #include <sys/socket.h>
+#include <arpa/inet.h>
 #include <netinet/in.h>
 #include <unistd.h>
 #include <cassert>
 #include <cstring>
-#include <iostream>
-#include "TcpServer.h"
+#include <Log.h>
+#include <StreamBuffer.h>
+#include <TcpServer.h>
 
 #define SERVER_SOCKET_INVALID (-1)
+#define READ_BUFFER_SIZE (128)
 #define TCP_PORT_MIN (1)
 #define TCP_PORT_MAX (65535)
 
@@ -22,11 +25,13 @@ namespace Flix {
 TcpServer::TcpServer():
     serverSocket(SERVER_SOCKET_INVALID)
 {
+    LOG_DEBUG("TcpServer::TcpServer()");
 }
 
 TcpServer::~TcpServer()
 {
     stop();
+    LOG_DEBUG("TcpServer::~TcpServer()");
 }
 
 bool TcpServer::start(int port)
@@ -44,6 +49,8 @@ bool TcpServer::start(int port)
         return false;
     }
 
+    int reuseAddressFlag = 1;
+
     sockaddr_in serverAddress;
     bzero(&serverAddress, sizeof(serverAddress));
 
@@ -51,7 +58,8 @@ bool TcpServer::start(int port)
     serverAddress.sin_addr.s_addr = htonl(INADDR_ANY);
     serverAddress.sin_port = htons(port);
 
-    if (bind(serverSocket, (sockaddr*) &serverAddress, sizeof(serverAddress)) != 0 ||
+    if (setsockopt(serverSocket, SOL_SOCKET, SO_REUSEADDR, &reuseAddressFlag, sizeof(reuseAddressFlag)) != 0 ||
+        bind(serverSocket, (sockaddr*) &serverAddress, sizeof(serverAddress)) != 0 ||
         listen(serverSocket, 5) != 0) {
         close(serverSocket);
         serverSocket = SERVER_SOCKET_INVALID;
@@ -66,6 +74,14 @@ bool TcpServer::stop(void)
     if (!isRunning()) {
         return false;
     }
+
+    for (auto& connection: connections) {
+        if (!connection.get()) {
+            continue;
+        }
+        connection->close();
+    }
+    connections.clear();
 
     close(serverSocket);
     serverSocket = SERVER_SOCKET_INVALID;
@@ -95,6 +111,15 @@ void TcpServer::updateFileDescriptors(fd_set* fds, int* maxFileDescriptor)
 
     FD_SET(serverSocket, fds);
     *maxFileDescriptor = max(*maxFileDescriptor, serverSocket);
+
+    for (auto& connection: connections) {
+        if (!connection.get() || !connection->isOpened()) {
+            continue;
+        }
+
+        FD_SET(connection->getConnectionSocket(), fds);
+        *maxFileDescriptor = max(*maxFileDescriptor, connection->getConnectionSocket());
+    }
 }
 
 void TcpServer::handleIncomingData(fd_set* fds)
@@ -105,12 +130,54 @@ void TcpServer::handleIncomingData(fd_set* fds)
 
     if (FD_ISSET(serverSocket, fds)) {
         sockaddr_in clientAddress;
-        socklen_t clientAddressSize;
+        socklen_t clientAddressSize = 0;
+        char clientAddressBuffer[INET_ADDRSTRLEN];
+
         bzero(&clientAddress, sizeof(clientAddress));
+        bzero(&clientAddressBuffer, sizeof(clientAddressBuffer));
         int clientSocket = accept(serverSocket, (sockaddr*) &clientAddress, &clientAddressSize);
         assert(clientAddressSize == sizeof(clientAddress));
-        std::cout << "INFO: Accepted client" << std::endl;
-        close(clientSocket);
+        inet_ntop(AF_INET, &clientAddress.sin_addr, clientAddressBuffer, sizeof(clientAddressBuffer));
+
+        TcpConnection* connection = new TcpConnection(clientSocket, std::string(clientAddressBuffer), ntohs(clientAddress.sin_port));
+        connections.push_back(TcpConnectionPointer(connection));
+    }
+    for (auto& connection: connections) {
+        if (!connection.get() || !connection->isOpened()) {
+            continue;
+        }
+
+        int connectionSocket = connection->getConnectionSocket();
+        if (FD_ISSET(connectionSocket, fds)) {
+            unsigned char rawBuffer[READ_BUFFER_SIZE];
+            ssize_t bytesRead = recv(connectionSocket, rawBuffer, sizeof(rawBuffer), 0);
+            LOG_DEBUG("bytesRead=" << bytesRead);
+
+            if (bytesRead <= 0) {
+                LOG_DEBUG("Client closed connection");
+                connection->close();
+            } else {
+                LOG_DEBUG("[" << std::string((char*)rawBuffer, bytesRead) << "]");
+
+                StreamBuffer buffer;
+                LOG_DEBUG("buffer.size()=" << buffer.size());
+                buffer.put(rawBuffer, bytesRead);
+                LOG_DEBUG("buffer.size()=" << buffer.size());
+                bzero(rawBuffer, sizeof(rawBuffer));
+                bytesRead = buffer.get(rawBuffer, sizeof(rawBuffer));
+                LOG_DEBUG("[" << std::string((char*)rawBuffer, bytesRead) << "], bytesRead=" << bytesRead << ", buffer.size()=" << buffer.size());
+            }
+        }
+    }
+
+    // Clean up closed or invalid connections
+    auto connection = connections.begin();
+    while (connection != connections.end()) {
+        if (!connection->get() || !connection->get()->isOpened()) {
+            connection = connections.erase(connection);
+        } else {
+            ++connection;
+        }
     }
 }
 

@@ -8,6 +8,8 @@
 #ifndef SRC_TCPSERVER_H_
 #define SRC_TCPSERVER_H_
 
+#include <TcpConnection.h>
+
 namespace Flix {
 
 class TcpServer {
@@ -25,6 +27,7 @@ public:
 
 private:
     int serverSocket;
+    TcpConnections connections;
 
     int max(int a, int b);
 };
