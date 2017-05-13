@@ -13,6 +13,11 @@ StreamBuffer::StreamBuffer()
 {
 }
 
+StreamBuffer::StreamBuffer(const StreamBuffer::const_iterator& a, const StreamBuffer::const_iterator& b):
+    std::vector<unsigned char>(a, b)
+{
+}
+
 StreamBuffer::~StreamBuffer()
 {
 }

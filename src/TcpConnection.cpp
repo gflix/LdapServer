@@ -6,6 +6,7 @@
  */
 
 #include <unistd.h>
+#include <GenericAsnOneObject.h>
 #include <Log.h>
 #include <TcpConnection.h>
 
@@ -66,7 +67,31 @@ void TcpConnection::handleIncomingData(const StreamBuffer& stream)
     }
 
     inputStream.insert(inputStream.end(), stream.cbegin(), stream.cend());
-    LOG_DEBUG("stream.size()=" << stream.size() << ", inputStream.size()=" << inputStream.size());
+
+    AsnOneDecodeStatus decodeStatus = AsnOneDecodeStatus::UNKNOWN;
+    bool quitImmediately = false;
+    while (inputStream.size() > 0 && decodeStatus != AsnOneDecodeStatus::INCOMPLETE && !quitImmediately) {
+        ssize_t consumedBytes = 0;
+        GenericAsnOneObject* asnOneObject = GenericAsnOneObject::decode(inputStream, consumedBytes, decodeStatus);
+
+        if (!asnOneObject) {
+            switch (decodeStatus) {
+            case AsnOneDecodeStatus::INVALID_TAG:
+            case AsnOneDecodeStatus::NOT_SUPPORTED:
+            case AsnOneDecodeStatus::UNKNOWN:
+                LOG_NOTICE("Protocol error detected (" << decodeStatus << ")! Closing connection.");
+                close();
+                quitImmediately = true;
+                break;
+            default:
+                break;
+            }
+        } else {
+            LOG_INFO("Cleaning up ASN.1 object...");
+            delete asnOneObject;
+        }
+        inputStream.erase(inputStream.begin(), inputStream.begin() + consumedBytes);
+    }
 }
 
 } /* namespace Flix */

@@ -16,6 +16,7 @@ namespace Flix {
 class StreamBuffer: public std::vector<unsigned char> {
 public:
     StreamBuffer();
+    StreamBuffer(const StreamBuffer::const_iterator& a, const StreamBuffer::const_iterator& b);
     virtual ~StreamBuffer();
 
     ssize_t put(unsigned char* data, size_t elements);

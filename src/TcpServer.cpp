@@ -16,7 +16,7 @@
 #include <TcpServer.h>
 
 #define SERVER_SOCKET_INVALID (-1)
-#define READ_BUFFER_SIZE (128)
+#define READ_BUFFER_SIZE (8)
 #define TCP_PORT_MIN (1)
 #define TCP_PORT_MAX (65535)
 
