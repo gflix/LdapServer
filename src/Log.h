@@ -42,11 +42,11 @@ private:
     LogLevel maxLevel;
 };
 
-#define LOG_ERROR(message) { std::stringstream stream; stream << message; Flix::Log::getInstance()->error(stream.str()); }
-#define LOG_WARNING(message) { std::stringstream stream; stream << message; Flix::Log::getInstance()->warning(stream.str()); }
-#define LOG_NOTICE(message) { std::stringstream stream; stream << message; Flix::Log::getInstance()->notice(stream.str()); }
-#define LOG_INFO(message) { std::stringstream stream; stream << message; Flix::Log::getInstance()->info(stream.str()); }
-#define LOG_DEBUG(message) { std::stringstream stream; stream << message; Flix::Log::getInstance()->debug(stream.str()); }
+#define LOG_ERROR(message) { std::stringstream log_stream; log_stream << message; Flix::Log::getInstance()->error(log_stream.str()); }
+#define LOG_WARNING(message) { std::stringstream log_stream; log_stream << message; Flix::Log::getInstance()->warning(log_stream.str()); }
+#define LOG_NOTICE(message) { std::stringstream log_stream; log_stream << message; Flix::Log::getInstance()->notice(log_stream.str()); }
+#define LOG_INFO(message) { std::stringstream log_stream; log_stream << message; Flix::Log::getInstance()->info(log_stream.str()); }
+#define LOG_DEBUG(message) { std::stringstream log_stream; log_stream << message; Flix::Log::getInstance()->debug(log_stream.str()); }
 
 } /* namespace Flix */
 
