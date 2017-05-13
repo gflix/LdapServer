@@ -17,6 +17,8 @@ public:
     LdapBindAsnOneObject();
     virtual ~LdapBindAsnOneObject();
 
+    bool isValid(void) const;
+
     static LdapBindAsnOneObject* decode(StreamBuffer buffer, AsnOneDecodeStatus& decodeStatus);
 };
 

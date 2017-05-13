@@ -10,6 +10,8 @@ libasn_one_objects_la_SOURCES = \
     IntegerAsnOneObject.h \
     LdapBindAsnOneObject.cpp \
     LdapBindAsnOneObject.h \
+    OctetStringAsnOneObject.cpp \
+    OctetStringAsnOneObject.h \
     SequenceAsnOneObject.cpp \
     SequenceAsnOneObject.h
 

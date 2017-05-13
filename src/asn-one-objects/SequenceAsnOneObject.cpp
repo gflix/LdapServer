@@ -23,22 +23,11 @@ SequenceAsnOneObject* SequenceAsnOneObject::decode(StreamBuffer buffer, AsnOneDe
     decodeStatus = AsnOneDecodeStatus::OK;
     SequenceAsnOneObject* asnOneObject = new SequenceAsnOneObject();
 
-    if (buffer.size() == 0) {
-        return asnOneObject;
+    if (!asnOneObject->decodeSequence(buffer, decodeStatus)) {
+        delete asnOneObject;
+        return nullptr;
     }
 
-    while (buffer.size() > 0 && decodeStatus == AsnOneDecodeStatus::OK) {
-        ssize_t consumedBytes = 0;
-        GenericAsnOneObject* subObject = GenericAsnOneObject::decode(buffer, consumedBytes, decodeStatus);
-
-        if (decodeStatus != AsnOneDecodeStatus::OK || !subObject) {
-            delete asnOneObject;
-            return nullptr;
-        }
-
-        asnOneObject->appendSubObject(subObject);
-        buffer.erase(buffer.begin(), buffer.begin() + consumedBytes);
-    }
     return asnOneObject;
 }
 

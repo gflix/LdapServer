@@ -8,16 +8,17 @@
 #ifndef SRC_GENERICASNONEOBJECT_H_
 #define SRC_GENERICASNONEOBJECT_H_
 
-#include <list>
 #include <ostream>
+#include <vector>
 #include <common/StreamBuffer.h>
 
 namespace Flix {
 
 enum class AsnOneObjectType {
     UNKNOWN,
-    SEQUENCE,
     INTEGER,
+    SEQUENCE,
+    OCTET_STRING,
     LDAP_BIND,
 };
 
@@ -26,17 +27,20 @@ enum class AsnOneDecodeStatus {
     NOT_SUPPORTED,
     INCOMPLETE,
     INVALID_TAG,
+    INVALID_COMPOUND,
     OK,
 };
 
 class GenericAsnOneObject;
 
-typedef std::list<GenericAsnOneObject*> AsnOneObjects;
+typedef std::vector<GenericAsnOneObject*> AsnOneObjects;
 
 class GenericAsnOneObject {
 public:
     GenericAsnOneObject(AsnOneObjectType type);
     virtual ~GenericAsnOneObject();
+
+    AsnOneObjectType getType(void) const;
 
     static GenericAsnOneObject* decode(const StreamBuffer& buffer, ssize_t& consumedBytes, AsnOneDecodeStatus& decodeStatus);
 
@@ -44,6 +48,7 @@ protected:
     AsnOneObjectType type;
     AsnOneObjects subObjects;
 
+    bool decodeSequence(StreamBuffer buffer, AsnOneDecodeStatus& decodeStatus);
     void appendSubObject(GenericAsnOneObject* subObject);
 };
 

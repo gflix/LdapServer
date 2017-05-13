@@ -8,6 +8,7 @@
 #include <asn-one-objects/GenericAsnOneObject.h>
 #include <asn-one-objects/IntegerAsnOneObject.h>
 #include <asn-one-objects/LdapBindAsnOneObject.h>
+#include <asn-one-objects/OctetStringAsnOneObject.h>
 #include <asn-one-objects/SequenceAsnOneObject.h>
 #include <common/Log.h>
 
@@ -21,11 +22,15 @@
 
 #define PDU_CLASS_UNIVERSAL (0)
 #define PDU_CLASS_APPLICATION (1)
+#define PDU_CLASS_CONTEXT (2)
 
 #define PDU_TYPE_UNIVERSAL_INTEGER (2)
+#define PDU_TYPE_UNIVERSAL_OCTET_STRING (4)
 #define PDU_TYPE_UNIVERSAL_SEQUENCE (16)
 
-#define PDU_TYPE_APPLICATION_BIND (0)
+#define PDU_TYPE_APPLICATION_LDAP_BIND (0)
+
+#define PDU_TYPE_CONTEXT_LDAP_BIND_CREDENTIAL (0)
 
 namespace Flix {
 
@@ -43,6 +48,32 @@ GenericAsnOneObject::~GenericAsnOneObject()
         delete subObject;
     }
     subObjects.clear();
+}
+
+AsnOneObjectType GenericAsnOneObject::getType(void) const
+{
+    return type;
+}
+
+bool GenericAsnOneObject::decodeSequence(StreamBuffer buffer, AsnOneDecodeStatus& decodeStatus)
+{
+    decodeStatus = AsnOneDecodeStatus::OK;
+    if (buffer.size() == 0) {
+        return true;
+    }
+
+    while (buffer.size() > 0 && decodeStatus == AsnOneDecodeStatus::OK) {
+        ssize_t consumedBytes = 0;
+        GenericAsnOneObject* subObject = GenericAsnOneObject::decode(buffer, consumedBytes, decodeStatus);
+
+        if (decodeStatus != AsnOneDecodeStatus::OK || !subObject) {
+            return false;
+        }
+
+        appendSubObject(subObject);
+        buffer.erase(buffer.begin(), buffer.begin() + consumedBytes);
+    }
+    return true;
 }
 
 void GenericAsnOneObject::appendSubObject(GenericAsnOneObject* subObject)
@@ -98,15 +129,22 @@ GenericAsnOneObject* GenericAsnOneObject::decode(const StreamBuffer& buffer, ssi
     LOG_DEBUG("subsetBuffer.size()=" << subsetBuffer.size());
     GenericAsnOneObject* asnOneObject = nullptr;
     decodeStatus = AsnOneDecodeStatus::INVALID_TAG;
+
     if (pduClass == PDU_CLASS_UNIVERSAL) {
         if (pduCombinedFlag && pduType == PDU_TYPE_UNIVERSAL_SEQUENCE) {
             asnOneObject = SequenceAsnOneObject::decode(subsetBuffer, decodeStatus);
         } else if (!pduCombinedFlag && pduType == PDU_TYPE_UNIVERSAL_INTEGER) {
             asnOneObject = IntegerAsnOneObject::decode(subsetBuffer, decodeStatus);
+        } else if (!pduCombinedFlag && pduType == PDU_TYPE_UNIVERSAL_OCTET_STRING) {
+            asnOneObject = OctetStringAsnOneObject::decode(subsetBuffer, decodeStatus);
         }
     } else if (pduClass == PDU_CLASS_APPLICATION) {
-        if (pduCombinedFlag && pduType == PDU_TYPE_APPLICATION_BIND) {
+        if (pduCombinedFlag && pduType == PDU_TYPE_APPLICATION_LDAP_BIND) {
             asnOneObject = LdapBindAsnOneObject::decode(subsetBuffer, decodeStatus);
+        }
+    } else if (pduClass == PDU_CLASS_CONTEXT) {
+        if (!pduCombinedFlag && pduType == PDU_TYPE_CONTEXT_LDAP_BIND_CREDENTIAL) {
+            asnOneObject = OctetStringAsnOneObject::decode(subsetBuffer, decodeStatus);
         }
     }
 
@@ -120,15 +158,23 @@ GenericAsnOneObject* GenericAsnOneObject::decode(const StreamBuffer& buffer, ssi
 std::ostream& operator<<(std::ostream& stream, AsnOneDecodeStatus decodeStatus)
 {
     switch (decodeStatus) {
+    // a requested ASN.1 function is not yet supported
     case AsnOneDecodeStatus::NOT_SUPPORTED:
         stream << "NOT SUPPORTED";
         break;
+    // the PDU contained in the buffer was not yet received completely
     case AsnOneDecodeStatus::INCOMPLETE:
         stream << "INCOMPLETE";
         break;
+    // a ASN.1 tag could not be decoded
     case AsnOneDecodeStatus::INVALID_TAG:
         stream << "INVALID TAG";
         break;
+    // a structure does not meet the expectations
+    case AsnOneDecodeStatus::INVALID_COMPOUND:
+        stream << "INVALID COMPOUND";
+        break;
+    // the ASN.1 was successfully decoded
     case AsnOneDecodeStatus::OK:
         stream << "OK";
         break;

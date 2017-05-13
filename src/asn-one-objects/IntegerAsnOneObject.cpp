@@ -6,6 +6,7 @@
  */
 
 #include <asn-one-objects/IntegerAsnOneObject.h>
+#include <common/Log.h>
 
 namespace Flix {
 
@@ -26,6 +27,7 @@ int IntegerAsnOneObject::getValue(void) const
 
 void IntegerAsnOneObject::setValue(int value)
 {
+    LOG_DEBUG("IntegerAsnOneObject::setValue(" << value << ")");
     this->value = value;
 }
 
