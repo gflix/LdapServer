@@ -16,6 +16,8 @@ libasn_one_objects_la_SOURCES = \
     LdapBindRequestAsnOneObject.h \
     LdapBindResponseAsnOneObject.cpp \
     LdapBindResponseAsnOneObject.h \
+    LdapFilterPresenceAsnOneObject.cpp \
+    LdapFilterPresenceAsnOneObject.h \
     LdapSearchRequestAsnOneObject.cpp \
     LdapSearchRequestAsnOneObject.h \
     LdapUnbindRequestAsnOneObject.cpp \

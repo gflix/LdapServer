@@ -10,6 +10,7 @@
 #include <asn-one-objects/GenericAsnOneObject.h>
 #include <asn-one-objects/IntegerAsnOneObject.h>
 #include <asn-one-objects/LdapBindRequestAsnOneObject.h>
+#include <asn-one-objects/LdapFilterPresenceAsnOneObject.h>
 #include <asn-one-objects/LdapSearchRequestAsnOneObject.h>
 #include <asn-one-objects/LdapUnbindRequestAsnOneObject.h>
 #include <asn-one-objects/OctetStringAsnOneObject.h>
@@ -202,6 +203,8 @@ GenericAsnOneObject* GenericAsnOneObject::decode(const StreamBuffer& buffer, ssi
     } else if (pduClass == PDU_CLASS_CONTEXT) {
         if (!pduCombinedFlag && pduType == PDU_TYPE_CONTEXT_LDAP_BIND_CREDENTIAL) {
             asnOneObject = OctetStringAsnOneObject::decode(subsetBuffer, decodeStatus);
+        } else if (!pduCombinedFlag && pduType == PDU_TYPE_CONTEXT_LDAP_FILTER_PRESENCE) {
+            asnOneObject = LdapFilterPresenceAsnOneObject::decode(subsetBuffer, decodeStatus);
         }
     }
 

@@ -23,13 +23,13 @@ LdapSearchRequestAsnOneObject::~LdapSearchRequestAsnOneObject()
 bool LdapSearchRequestAsnOneObject::isValid(void) const
 {
     LOG_DEBUG("LdapSearchRequestAsnOneObject::isValid(subObjects.size()=" << subObjects.size());
-    if (subObjects.size() < 3) {
+    if (subObjects.size() < 8) {
         return false;
     }
 
-    if (subObjects[0]->getType() != AsnOneObjectType::INTEGER ||
-        subObjects[1]->getType() != AsnOneObjectType::OCTET_STRING ||
-        subObjects[2]->getType() != AsnOneObjectType::OCTET_STRING) {
+    if (subObjects[0]->getType() != AsnOneObjectType::OCTET_STRING ||
+        subObjects[1]->getType() != AsnOneObjectType::ENUMERATED ||
+        subObjects[2]->getType() != AsnOneObjectType::ENUMERATED) {
         return false;
     }
 
@@ -69,27 +69,26 @@ StreamBuffer LdapSearchRequestAsnOneObject::serialize(void) const
 
 std::string LdapSearchRequestAsnOneObject::dump(void) const
 {
-//    std::string dumpedObject;
-//
-//    dumpedObject = "LdapBindRequest{";
-//
-//    bool firstObject = true;
-//    for (auto& subObject: subObjects) {
-//        if (!subObject) {
-//            continue;
-//        }
-//        if (firstObject) {
-//            firstObject = false;
-//        } else {
-//            dumpedObject += ", ";
-//        }
-//        dumpedObject += subObject->dump();
-//    }
-//
-//    dumpedObject += '}';
-//
-//    return dumpedObject;
-    return "LdapSearchRequest{}";
+    std::string dumpedObject;
+
+    dumpedObject = "LdapSearchRequest{";
+
+    bool firstObject = true;
+    for (auto& subObject: subObjects) {
+        if (!subObject) {
+            continue;
+        }
+        if (firstObject) {
+            firstObject = false;
+        } else {
+            dumpedObject += ", ";
+        }
+        dumpedObject += subObject->dump();
+    }
+
+    dumpedObject += '}';
+
+    return dumpedObject;
 }
 
 } /* namespace Flix */

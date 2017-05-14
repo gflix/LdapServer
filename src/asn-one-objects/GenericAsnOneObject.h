@@ -28,6 +28,7 @@
 #define PDU_TYPE_APPLICATION_LDAP_SEARCH_REQUEST (3)
 
 #define PDU_TYPE_CONTEXT_LDAP_BIND_CREDENTIAL (0)
+#define PDU_TYPE_CONTEXT_LDAP_FILTER_PRESENCE (7)
 
 namespace Flix {
 
@@ -42,6 +43,7 @@ enum class AsnOneObjectType {
     LDAP_BIND_RESPONSE,
     LDAP_UNBIND_REQUEST,
     LDAP_SEARCH_REQUEST,
+    LDAP_FILTER_PRESENCE,
 };
 
 enum class AsnOneDecodeStatus {
