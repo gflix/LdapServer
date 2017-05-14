@@ -55,6 +55,11 @@ void Log::debug(const std::string& message)
     log(LogLevel::DEBUG, message);
 }
 
+void Log::setLogLevel(LogLevel maxLevel)
+{
+    this->maxLevel = maxLevel;
+}
+
 Log* Log::getInstance(void) {
     return instance;
 }

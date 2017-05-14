@@ -18,6 +18,7 @@ void handleTerminationRequest(int signal)
 
 int main(int argc, char* argv[])
 {
+    Flix::Log::getInstance()->setLogLevel(Flix::LogLevel::INFO);
     Flix::TcpServer tcpServer;
 
     signal(SIGINT, &handleTerminationRequest);

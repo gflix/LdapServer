@@ -36,6 +36,8 @@ public:
     void info(const std::string& message);
     void debug(const std::string& message);
 
+    void setLogLevel(LogLevel maxLevel);
+
     static Log* getInstance(void);
 
 private:
