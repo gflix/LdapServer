@@ -18,6 +18,7 @@
 
 #define PDU_TYPE_UNIVERSAL_INTEGER (2)
 #define PDU_TYPE_UNIVERSAL_OCTET_STRING (4)
+#define PDU_TYPE_UNIVERSAL_ENUMERATED (10)
 #define PDU_TYPE_UNIVERSAL_SEQUENCE (16)
 
 #define PDU_TYPE_APPLICATION_LDAP_BIND_REQUEST (0)
@@ -30,9 +31,11 @@ namespace Flix {
 enum class AsnOneObjectType {
     UNKNOWN,
     INTEGER,
+    ENUMERATED,
     SEQUENCE,
     OCTET_STRING,
-    LDAP_BIND,
+    LDAP_BIND_REQUEST,
+    LDAP_BIND_RESPONSE
 };
 
 enum class AsnOneDecodeStatus {
@@ -73,6 +76,7 @@ protected:
     bool decodeSequence(StreamBuffer buffer, AsnOneDecodeStatus& decodeStatus);
 
     StreamBuffer addAsnOneHeader(int pduClass, bool pduCombinedFlag, int pduType, const StreamBuffer& payload) const;
+    StreamBuffer serializeSequence(int pduClass, int pduType) const;
 };
 
 std::ostream& operator<<(std::ostream& stream, AsnOneDecodeStatus decodeStatus);

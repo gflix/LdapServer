@@ -7,10 +7,10 @@
 
 #include <sys/socket.h>
 #include <unistd.h>
+#include <cassert>
 #include <asn-one-objects/GenericAsnOneObject.h>
 #include <common/Log.h>
 #include <ldap/BindResponseOperation.h>
-#include <ldap/LdapMessage.h>
 #include <network/TcpConnection.h>
 
 namespace Flix {
@@ -94,6 +94,22 @@ void TcpConnection::handleIncomingData(const StreamBuffer& stream)
 
             if (ldapMessage) {
                 LOG_DEBUG(*ldapMessage);
+                LdapMessage* ldapResponseMessage = ldapMessage->execute();
+                LOG_DEBUG(*ldapResponseMessage);
+
+                GenericAsnOneObject* responseObject = ldapResponseMessage->getAsnOneObject();
+                assert(responseObject);
+                StreamBuffer responseBuffer = responseObject->serialize();
+//                responseBuffer.dump();
+
+                if (!sendData(responseBuffer)) {
+                    close();
+                    quitImmediately = true;
+                }
+
+                delete responseObject;
+                delete ldapResponseMessage;
+
                 LOG_INFO("Cleaning up LDAP message...");
                 delete ldapMessage;
             } else {
@@ -104,6 +120,23 @@ void TcpConnection::handleIncomingData(const StreamBuffer& stream)
         }
         inputStream.erase(inputStream.begin(), inputStream.begin() + consumedBytes);
     }
+}
+
+bool TcpConnection::sendData(StreamBuffer stream)
+{
+    if (!isOpened()) {
+        return false;
+    }
+
+    unsigned char buffer[128];
+    while (stream.size() > 0) {
+        ssize_t bytesRead = stream.get(buffer, sizeof(buffer));
+        if (bytesRead <= 0) {
+            return false;
+        }
+        send(connectionSocket, buffer, bytesRead, 0);
+    }
+    return true;
 }
 
 } /* namespace Flix */

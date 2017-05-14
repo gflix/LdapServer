@@ -4,12 +4,16 @@ AM_CPPFLAGS = \
 noinst_LTLIBRARIES = libasn-one-objects.la
 
 libasn_one_objects_la_SOURCES = \
+    EnumeratedAsnOneObject.cpp \
+    EnumeratedAsnOneObject.h \
     GenericAsnOneObject.cpp \
     GenericAsnOneObject.h \
     IntegerAsnOneObject.cpp \
     IntegerAsnOneObject.h \
-    LdapBindAsnOneObject.cpp \
-    LdapBindAsnOneObject.h \
+    LdapBindRequestAsnOneObject.cpp \
+    LdapBindRequestAsnOneObject.h \
+    LdapBindResponseAsnOneObject.cpp \
+    LdapBindResponseAsnOneObject.h \
     OctetStringAsnOneObject.cpp \
     OctetStringAsnOneObject.h \
     SequenceAsnOneObject.cpp \

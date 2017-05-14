@@ -12,6 +12,7 @@
 #include <memory>
 #include <string>
 #include <common/StreamBuffer.h>
+#include <ldap/LdapMessage.h>
 
 namespace Flix {
 
@@ -35,6 +36,8 @@ private:
 
     bool opened;
     StreamBuffer inputStream;
+
+    bool sendData(StreamBuffer stream);
 };
 
 typedef std::shared_ptr<TcpConnection> TcpConnectionPointer;

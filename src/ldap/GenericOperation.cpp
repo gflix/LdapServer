@@ -38,9 +38,8 @@ GenericOperation* GenericOperation::fromAsnOneObject(GenericAsnOneObject* asnOne
 
     GenericOperation* operation = nullptr;
     switch (asnOneObject->getType()) {
-    case AsnOneObjectType::LDAP_BIND:
-        operation = BindRequestOperation::fromAsnOneObject(LdapBindAsnOneObject::castObject(asnOneObject));
-        LOG_DEBUG("Detected LdapBindRequest");
+    case AsnOneObjectType::LDAP_BIND_REQUEST:
+        operation = BindRequestOperation::fromAsnOneObject(LdapBindRequestAsnOneObject::castObject(asnOneObject));
         break;
     default:
         break;

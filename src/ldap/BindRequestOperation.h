@@ -8,7 +8,7 @@
 #ifndef SRC_LDAP_BINDREQUESTOPERATION_H_
 #define SRC_LDAP_BINDREQUESTOPERATION_H_
 
-#include <asn-one-objects/LdapBindAsnOneObject.h>
+#include <asn-one-objects/LdapBindRequestAsnOneObject.h>
 #include <ldap/GenericOperation.h>
 
 namespace Flix {
@@ -21,13 +21,17 @@ public:
     int getProtocolVersion(void) const;
     const std::string& getAuthenticationDn(void) const;
     const std::string& getPassword(void) const;
+
+    virtual GenericOperation* execute(void) const;
+
+    virtual GenericAsnOneObject* getAsnOneObject(void) const;
     virtual std::string dump(void) const;
 
     void setProtocolVersion(int protocolVersion);
     void setAuthenticationDn(const std::string& authenticationDn);
     void setPassword(const std::string& password);
 
-    static BindRequestOperation* fromAsnOneObject(LdapBindAsnOneObject* asnOneObject);
+    static BindRequestOperation* fromAsnOneObject(LdapBindRequestAsnOneObject* asnOneObject);
 
 private:
     int protocolVersion;

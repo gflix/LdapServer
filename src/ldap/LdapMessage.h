@@ -23,6 +23,10 @@ public:
     int getMessageId(void) const;
     GenericOperation* getOperation(void) const;
     bool isOperationType(OperationType requestedType) const;
+
+    LdapMessage* execute(void) const;
+
+    GenericAsnOneObject* getAsnOneObject(void) const;
     std::string dump(void) const;
 
     void setMessageId(int messageId);

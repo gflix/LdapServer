@@ -7,7 +7,7 @@
 
 #include <asn-one-objects/GenericAsnOneObject.h>
 #include <asn-one-objects/IntegerAsnOneObject.h>
-#include <asn-one-objects/LdapBindAsnOneObject.h>
+#include <asn-one-objects/LdapBindRequestAsnOneObject.h>
 #include <asn-one-objects/OctetStringAsnOneObject.h>
 #include <asn-one-objects/SequenceAsnOneObject.h>
 #include <common/Log.h>
@@ -116,6 +116,19 @@ StreamBuffer GenericAsnOneObject::addAsnOneHeader(int pduClass, bool pduCombined
     return pdu;
 }
 
+StreamBuffer GenericAsnOneObject::serializeSequence(int pduClass, int pduType) const
+{
+    StreamBuffer payload;
+    for (auto& subObject: subObjects) {
+        if (!subObject) {
+            continue;
+        }
+        payload.push_back(subObject->serialize());
+    }
+
+    return addAsnOneHeader(pduClass, true, pduType, payload);
+}
+
 GenericAsnOneObject* GenericAsnOneObject::decode(const StreamBuffer& buffer, ssize_t& consumedBytes, AsnOneDecodeStatus& decodeStatus)
 {
     decodeStatus = AsnOneDecodeStatus::UNKNOWN;
@@ -173,7 +186,7 @@ GenericAsnOneObject* GenericAsnOneObject::decode(const StreamBuffer& buffer, ssi
         }
     } else if (pduClass == PDU_CLASS_APPLICATION) {
         if (pduCombinedFlag && pduType == PDU_TYPE_APPLICATION_LDAP_BIND_REQUEST) {
-            asnOneObject = LdapBindAsnOneObject::decode(subsetBuffer, decodeStatus);
+            asnOneObject = LdapBindRequestAsnOneObject::decode(subsetBuffer, decodeStatus);
         }
     } else if (pduClass == PDU_CLASS_CONTEXT) {
         if (!pduCombinedFlag && pduType == PDU_TYPE_CONTEXT_LDAP_BIND_CREDENTIAL) {

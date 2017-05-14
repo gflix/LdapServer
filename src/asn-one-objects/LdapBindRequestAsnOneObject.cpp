@@ -5,22 +5,22 @@
  *      Author: felix
  */
 
+#include <asn-one-objects/LdapBindRequestAsnOneObject.h>
 #include <cassert>
-#include <asn-one-objects/LdapBindAsnOneObject.h>
 #include <common/Log.h>
 
 namespace Flix {
 
-LdapBindAsnOneObject::LdapBindAsnOneObject():
-    GenericAsnOneObject(AsnOneObjectType::LDAP_BIND)
+LdapBindRequestAsnOneObject::LdapBindRequestAsnOneObject():
+    GenericAsnOneObject(AsnOneObjectType::LDAP_BIND_REQUEST)
 {
 }
 
-LdapBindAsnOneObject::~LdapBindAsnOneObject()
+LdapBindRequestAsnOneObject::~LdapBindRequestAsnOneObject()
 {
 }
 
-bool LdapBindAsnOneObject::isValid(void) const
+bool LdapBindRequestAsnOneObject::isValid(void) const
 {
     if (subObjects.size() < 3) {
         return false;
@@ -35,10 +35,10 @@ bool LdapBindAsnOneObject::isValid(void) const
     return true;
 }
 
-LdapBindAsnOneObject* LdapBindAsnOneObject::decode(StreamBuffer buffer, AsnOneDecodeStatus& decodeStatus)
+LdapBindRequestAsnOneObject* LdapBindRequestAsnOneObject::decode(StreamBuffer buffer, AsnOneDecodeStatus& decodeStatus)
 {
     decodeStatus = AsnOneDecodeStatus::OK;
-    LdapBindAsnOneObject* asnOneObject = new LdapBindAsnOneObject();
+    LdapBindRequestAsnOneObject* asnOneObject = new LdapBindRequestAsnOneObject();
 
     if (!asnOneObject->decodeSequence(buffer, decodeStatus)) {
         delete asnOneObject;
@@ -54,23 +54,23 @@ LdapBindAsnOneObject* LdapBindAsnOneObject::decode(StreamBuffer buffer, AsnOneDe
     return asnOneObject;
 }
 
-LdapBindAsnOneObject* LdapBindAsnOneObject::castObject(GenericAsnOneObject* object)
+LdapBindRequestAsnOneObject* LdapBindRequestAsnOneObject::castObject(GenericAsnOneObject* object)
 {
-    return static_cast<LdapBindAsnOneObject*>(object);
+    return static_cast<LdapBindRequestAsnOneObject*>(object);
 }
 
-StreamBuffer LdapBindAsnOneObject::serialize(void) const
+StreamBuffer LdapBindRequestAsnOneObject::serialize(void) const
 {
     // not supported
     assert(false);
     return {};
 }
 
-std::string LdapBindAsnOneObject::dump(void) const
+std::string LdapBindRequestAsnOneObject::dump(void) const
 {
     std::string dumpedObject;
 
-    dumpedObject = "LdapBind{";
+    dumpedObject = "LdapBindRequest{";
 
     bool firstObject = true;
     for (auto& subObject: subObjects) {

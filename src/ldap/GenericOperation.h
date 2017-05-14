@@ -26,6 +26,9 @@ public:
     OperationType getType(void) const;
     bool isType(OperationType requestedType) const;
 
+    virtual GenericOperation* execute(void) const = 0;
+
+    virtual GenericAsnOneObject* getAsnOneObject(void) const = 0;
     virtual std::string dump(void) const = 0;
 
     static GenericOperation* fromAsnOneObject(GenericAsnOneObject* asnOneObject);

@@ -7,6 +7,7 @@
 
 #include <sstream>
 #include <asn-one-objects/IntegerAsnOneObject.h>
+#include <asn-one-objects/SequenceAsnOneObject.h>
 #include <ldap/LdapMessage.h>
 
 namespace Flix {
@@ -40,6 +41,31 @@ bool LdapMessage::isOperationType(OperationType requestedType) const
         return false;
     }
     return operation->isType(requestedType);
+}
+
+LdapMessage* LdapMessage::execute(void) const
+{
+    LdapMessage* ldapResponseMessage = new LdapMessage();
+    ldapResponseMessage->setMessageId(messageId);
+
+    if (operation) {
+        ldapResponseMessage->setOperation(operation->execute());
+    }
+
+    return ldapResponseMessage;
+}
+
+GenericAsnOneObject* LdapMessage::getAsnOneObject(void) const
+{
+    SequenceAsnOneObject* asnObject = new SequenceAsnOneObject();
+    IntegerAsnOneObject* messageIdObject = new IntegerAsnOneObject();
+    messageIdObject->setValue(messageId);
+    asnObject->appendSubObject(messageIdObject);
+    if (operation) {
+        asnObject->appendSubObject(operation->getAsnOneObject());
+    }
+
+    return asnObject;
 }
 
 std::string LdapMessage::dump(void) const

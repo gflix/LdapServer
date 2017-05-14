@@ -5,10 +5,12 @@
  *      Author: felix
  */
 
+#include <cassert>
 #include <sstream>
 #include <asn-one-objects/IntegerAsnOneObject.h>
 #include <asn-one-objects/OctetStringAsnOneObject.h>
 #include <ldap/BindRequestOperation.h>
+#include <ldap/BindResponseOperation.h>
 
 namespace Flix {
 
@@ -37,6 +39,20 @@ const std::string& BindRequestOperation::getPassword(void) const
     return password;
 }
 
+GenericOperation* BindRequestOperation::execute(void) const
+{
+    BindResponseOperation* operation = new BindResponseOperation();
+
+    return operation;
+}
+
+GenericAsnOneObject* BindRequestOperation::getAsnOneObject(void) const
+{
+    // Not supported
+    assert(false);
+    return nullptr;
+}
+
 std::string BindRequestOperation::dump(void) const
 {
     std::stringstream dumpedOperation;
@@ -63,7 +79,7 @@ void BindRequestOperation::setPassword(const std::string& password)
     this->password = password;
 }
 
-BindRequestOperation* BindRequestOperation::fromAsnOneObject(LdapBindAsnOneObject* asnOneObject)
+BindRequestOperation* BindRequestOperation::fromAsnOneObject(LdapBindRequestAsnOneObject* asnOneObject)
 {
     if (!asnOneObject || !asnOneObject->isValid()) {
         return nullptr;

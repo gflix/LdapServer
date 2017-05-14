@@ -17,6 +17,9 @@ public:
     BindResponseOperation();
     virtual ~BindResponseOperation();
 
+    virtual GenericOperation* execute(void) const;
+
+    virtual GenericAsnOneObject* getAsnOneObject(void) const;
     virtual std::string dump(void) const;
 };
 
