@@ -11,7 +11,9 @@ libldap_la_SOURCES = \
 	BindResponseOperation.cpp \
 	BindResponseOperation.h \
     LdapMessage.cpp \
-    LdapMessage.h
+    LdapMessage.h \
+	UnbindRequestOperation.cpp \
+	UnbindRequestOperation.h
 
 MAINTAINERCLEANFILES = \
     Makefile.in

@@ -8,6 +8,7 @@
 #include <common/Log.h>
 #include <ldap/BindRequestOperation.h>
 #include <ldap/GenericOperation.h>
+#include <ldap/UnbindRequestOperation.h>
 
 namespace Flix {
 
@@ -41,6 +42,9 @@ GenericOperation* GenericOperation::fromAsnOneObject(GenericAsnOneObject* asnOne
     case AsnOneObjectType::LDAP_BIND_REQUEST:
         operation = BindRequestOperation::fromAsnOneObject(LdapBindRequestAsnOneObject::castObject(asnOneObject));
         break;
+    case AsnOneObjectType::LDAP_UNBIND_REQUEST:
+        operation = UnbindRequestOperation::fromAsnOneObject(LdapUnbindRequestAsnOneObject::castObject(asnOneObject));
+        break;
     default:
         break;
     }
@@ -51,6 +55,25 @@ GenericOperation* GenericOperation::fromAsnOneObject(GenericAsnOneObject* asnOne
 std::ostream& operator<<(std::ostream& stream, const GenericOperation& operation)
 {
     stream << operation.dump();
+    return stream;
+}
+
+std::ostream& operator<<(std::ostream& stream, OperationResult result)
+{
+    switch (result) {
+    case OperationResult::SUCCESS:
+        stream << "SUCCESS";
+        break;
+    case OperationResult::INVALID_CREDENTIALS:
+        stream << "INVALID CREDENTIALS";
+        break;
+    case OperationResult::OTHER:
+        stream << "OTHER RESULT";
+        break;
+    default:
+        stream << "UNKNOWN RESULT";
+        break;
+    }
     return stream;
 }
 

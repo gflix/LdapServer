@@ -16,6 +16,7 @@ enum class OperationType {
     UNKNOWN,
     BIND_REQUEST,
     BIND_RESPONSE,
+    UNBIND_REQUEST,
 };
 
 enum class OperationResult {
@@ -43,6 +44,8 @@ public:
 private:
     OperationType type;
 };
+
+std::ostream& operator<<(std::ostream& stream, OperationResult result);
 
 } /* namespace Flix */
 

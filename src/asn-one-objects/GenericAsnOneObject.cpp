@@ -8,6 +8,7 @@
 #include <asn-one-objects/GenericAsnOneObject.h>
 #include <asn-one-objects/IntegerAsnOneObject.h>
 #include <asn-one-objects/LdapBindRequestAsnOneObject.h>
+#include <asn-one-objects/LdapUnbindRequestAsnOneObject.h>
 #include <asn-one-objects/OctetStringAsnOneObject.h>
 #include <asn-one-objects/SequenceAsnOneObject.h>
 #include <common/Log.h>
@@ -187,6 +188,8 @@ GenericAsnOneObject* GenericAsnOneObject::decode(const StreamBuffer& buffer, ssi
     } else if (pduClass == PDU_CLASS_APPLICATION) {
         if (pduCombinedFlag && pduType == PDU_TYPE_APPLICATION_LDAP_BIND_REQUEST) {
             asnOneObject = LdapBindRequestAsnOneObject::decode(subsetBuffer, decodeStatus);
+        } else if (!pduCombinedFlag && pduType == PDU_TYPE_APPLICATION_LDAP_UNBIND_REQUEST) {
+            asnOneObject = LdapUnbindRequestAsnOneObject::decode(subsetBuffer, decodeStatus);
         }
     } else if (pduClass == PDU_CLASS_CONTEXT) {
         if (!pduCombinedFlag && pduType == PDU_TYPE_CONTEXT_LDAP_BIND_CREDENTIAL) {

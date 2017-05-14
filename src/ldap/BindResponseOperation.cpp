@@ -70,7 +70,9 @@ std::string BindResponseOperation::dump(void) const
 {
     std::stringstream dumpedOperation;
 
-    dumpedOperation << "BindResponse()";
+    dumpedOperation << "BindResponse(result=" << result <<
+        ", matchedDn=" << matchedDn <<
+        ", diagnosticMessage=" << diagnosticMessage << ")";
 
     return dumpedOperation.str();
 }

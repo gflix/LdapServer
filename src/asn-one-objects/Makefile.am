@@ -14,6 +14,8 @@ libasn_one_objects_la_SOURCES = \
     LdapBindRequestAsnOneObject.h \
     LdapBindResponseAsnOneObject.cpp \
     LdapBindResponseAsnOneObject.h \
+    LdapUnbindRequestAsnOneObject.cpp \
+    LdapUnbindRequestAsnOneObject.h \
     OctetStringAsnOneObject.cpp \
     OctetStringAsnOneObject.h \
     SequenceAsnOneObject.cpp \

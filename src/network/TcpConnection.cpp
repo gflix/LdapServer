@@ -89,28 +89,37 @@ void TcpConnection::handleIncomingData(const StreamBuffer& stream)
             LOG_DEBUG(*asnOneObject);
 
             LdapMessage* ldapMessage = LdapMessage::fromAsnOneObject(asnOneObject);
-            LOG_INFO("Cleaning up ASN.1 object...");
+            LOG_DEBUG("Cleaning up ASN.1 object...");
             delete asnOneObject;
 
             if (ldapMessage) {
-                LOG_DEBUG(*ldapMessage);
+                LOG_INFO("Request: " << *ldapMessage);
                 LdapMessage* ldapResponseMessage = ldapMessage->execute();
-                LOG_DEBUG(*ldapResponseMessage);
-
-                GenericAsnOneObject* responseObject = ldapResponseMessage->getAsnOneObject();
-                assert(responseObject);
-                StreamBuffer responseBuffer = responseObject->serialize();
-//                responseBuffer.dump();
-
-                if (!sendData(responseBuffer)) {
+                if (!ldapResponseMessage) {
+                    if (ldapMessage->isOperationType(OperationType::UNBIND_REQUEST)) {
+                        LOG_NOTICE("Received LDAP unbind request. Closing connection...");
+                    } else {
+                        LOG_WARNING("Could not execute LDAP request! Closing connection...");
+                    }
                     close();
                     quitImmediately = true;
+                } else {
+                    LOG_INFO("Response: " << *ldapResponseMessage);
+
+                    GenericAsnOneObject* responseObject = ldapResponseMessage->getAsnOneObject();
+                    assert(responseObject);
+                    StreamBuffer responseBuffer = responseObject->serialize();
+
+                    if (!sendData(responseBuffer)) {
+                        close();
+                        quitImmediately = true;
+                    }
+
+                    delete responseObject;
+                    delete ldapResponseMessage;
                 }
 
-                delete responseObject;
-                delete ldapResponseMessage;
-
-                LOG_INFO("Cleaning up LDAP message...");
+                LOG_DEBUG("Cleaning up LDAP message...");
                 delete ldapMessage;
             } else {
                 LOG_ERROR("Could not decode LDAP message! Closing connection.");

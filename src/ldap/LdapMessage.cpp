@@ -45,12 +45,19 @@ bool LdapMessage::isOperationType(OperationType requestedType) const
 
 LdapMessage* LdapMessage::execute(void) const
 {
+    if (!operation) {
+        return nullptr;
+    }
+
     LdapMessage* ldapResponseMessage = new LdapMessage();
     ldapResponseMessage->setMessageId(messageId);
 
-    if (operation) {
-        ldapResponseMessage->setOperation(operation->execute());
+    GenericOperation* responseOperation = operation->execute();
+    if (!responseOperation) {
+        delete ldapResponseMessage;
+        return nullptr;
     }
+    ldapResponseMessage->setOperation(responseOperation);
 
     return ldapResponseMessage;
 }
