@@ -15,12 +15,28 @@
 namespace Flix {
 
 BindResponseOperation::BindResponseOperation():
-    GenericOperation(OperationType::BIND_RESPONSE)
+    GenericOperation(OperationType::BIND_RESPONSE),
+    result(OperationResult::OTHER)
 {
 }
 
 BindResponseOperation::~BindResponseOperation()
 {
+}
+
+void BindResponseOperation::setResult(OperationResult result)
+{
+    this->result = result;
+}
+
+void BindResponseOperation::setMatchedDn(const std::string& matchedDn)
+{
+    this->matchedDn = matchedDn;
+}
+
+void BindResponseOperation::setDiagnosticMessage(const std::string& diagnosticMessage)
+{
+    this->diagnosticMessage = diagnosticMessage;
 }
 
 GenericOperation* BindResponseOperation::execute(void) const
@@ -33,15 +49,19 @@ GenericOperation* BindResponseOperation::execute(void) const
 GenericAsnOneObject* BindResponseOperation::getAsnOneObject(void) const
 {
     LdapBindResponseAsnOneObject* asnObject = new LdapBindResponseAsnOneObject();
-    EnumeratedAsnOneObject* ldapResult = new EnumeratedAsnOneObject();
-    ldapResult->setValue(2);
-    OctetStringAsnOneObject* matchedDn = new OctetStringAsnOneObject();
-    matchedDn->setValue("None");
-    OctetStringAsnOneObject* diagnosticMessage = new OctetStringAsnOneObject();
-    diagnosticMessage->setValue("Success");
-    asnObject->appendSubObject(ldapResult);
-    asnObject->appendSubObject(matchedDn);
-    asnObject->appendSubObject(diagnosticMessage);
+
+    EnumeratedAsnOneObject* resultObject = new EnumeratedAsnOneObject();
+    resultObject->setValue(static_cast<unsigned char>(result));
+
+    OctetStringAsnOneObject* matchedDnObject = new OctetStringAsnOneObject();
+    matchedDnObject->setValue(matchedDn);
+
+    OctetStringAsnOneObject* diagnosticMessageObject = new OctetStringAsnOneObject();
+    diagnosticMessageObject->setValue(diagnosticMessage);
+
+    asnObject->appendSubObject(resultObject);
+    asnObject->appendSubObject(matchedDnObject);
+    asnObject->appendSubObject(diagnosticMessageObject);
 
     return asnObject;
 }

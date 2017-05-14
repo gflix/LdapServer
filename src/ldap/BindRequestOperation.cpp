@@ -43,6 +43,14 @@ GenericOperation* BindRequestOperation::execute(void) const
 {
     BindResponseOperation* operation = new BindResponseOperation();
 
+    // Very simple authentication
+    if (authenticationDn == "cn=foo" && password == "bar") {
+        operation->setResult(OperationResult::SUCCESS);
+    } else {
+        operation->setResult(OperationResult::INVALID_CREDENTIALS);
+        operation->setDiagnosticMessage("Invalid credentials");
+    }
+
     return operation;
 }
 

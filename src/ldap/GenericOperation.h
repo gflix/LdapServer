@@ -18,6 +18,12 @@ enum class OperationType {
     BIND_RESPONSE,
 };
 
+enum class OperationResult {
+    SUCCESS = 0,
+    INVALID_CREDENTIALS = 49,
+    OTHER = 80,
+};
+
 class GenericOperation {
 public:
     GenericOperation(OperationType type);

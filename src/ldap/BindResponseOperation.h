@@ -17,10 +17,19 @@ public:
     BindResponseOperation();
     virtual ~BindResponseOperation();
 
+    void setResult(OperationResult result);
+    void setMatchedDn(const std::string& matchedDn);
+    void setDiagnosticMessage(const std::string& diagnosticMessage);
+
     virtual GenericOperation* execute(void) const;
 
     virtual GenericAsnOneObject* getAsnOneObject(void) const;
     virtual std::string dump(void) const;
+
+private:
+    OperationResult result;
+    std::string matchedDn;
+    std::string diagnosticMessage;
 };
 
 } /* namespace Flix */
