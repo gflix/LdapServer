@@ -18,6 +18,7 @@ enum class OperationType {
     BIND_RESPONSE,
     UNBIND_REQUEST,
     SEARCH_REQUEST,
+    SEARCH_RESULT_DONE,
 };
 
 enum class OperationResult {

@@ -20,6 +20,8 @@ libasn_one_objects_la_SOURCES = \
     LdapFilterPresenceAsnOneObject.h \
     LdapSearchRequestAsnOneObject.cpp \
     LdapSearchRequestAsnOneObject.h \
+    LdapSearchResultDoneAsnOneObject.cpp \
+    LdapSearchResultDoneAsnOneObject.h \
     LdapUnbindRequestAsnOneObject.cpp \
     LdapUnbindRequestAsnOneObject.h \
     OctetStringAsnOneObject.cpp \

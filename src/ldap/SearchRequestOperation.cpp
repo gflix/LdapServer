@@ -9,6 +9,7 @@
 #include <sstream>
 #include <asn-one-objects/OctetStringAsnOneObject.h>
 #include <ldap/SearchRequestOperation.h>
+#include <ldap/SearchResultDoneOperation.h>
 
 namespace Flix {
 
@@ -88,7 +89,11 @@ void SearchRequestOperation::setOnlyTypesFlag(bool onlyTypesFlag)
 
 GenericOperation* SearchRequestOperation::execute(void) const
 {
-    return nullptr;
+    SearchResultDoneOperation* operation = new SearchResultDoneOperation();
+
+    operation->setResult(OperationResult::SUCCESS);
+
+    return operation;
 }
 
 GenericAsnOneObject* SearchRequestOperation::getAsnOneObject(void) const
