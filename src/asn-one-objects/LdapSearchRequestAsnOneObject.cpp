@@ -22,14 +22,18 @@ LdapSearchRequestAsnOneObject::~LdapSearchRequestAsnOneObject()
 
 bool LdapSearchRequestAsnOneObject::isValid(void) const
 {
-    LOG_DEBUG("LdapSearchRequestAsnOneObject::isValid(subObjects.size()=" << subObjects.size());
     if (subObjects.size() < 8) {
         return false;
     }
 
+    // Do not check for subObjects[6] as this type depends on the filter
     if (subObjects[0]->getType() != AsnOneObjectType::OCTET_STRING ||
         subObjects[1]->getType() != AsnOneObjectType::ENUMERATED ||
-        subObjects[2]->getType() != AsnOneObjectType::ENUMERATED) {
+        subObjects[2]->getType() != AsnOneObjectType::ENUMERATED ||
+        subObjects[3]->getType() != AsnOneObjectType::INTEGER ||
+        subObjects[4]->getType() != AsnOneObjectType::INTEGER ||
+        subObjects[5]->getType() != AsnOneObjectType::BOOLEAN ||
+        subObjects[7]->getType() != AsnOneObjectType::SEQUENCE) {
         return false;
     }
 

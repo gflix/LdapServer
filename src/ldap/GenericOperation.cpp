@@ -8,6 +8,7 @@
 #include <common/Log.h>
 #include <ldap/BindRequestOperation.h>
 #include <ldap/GenericOperation.h>
+#include <ldap/SearchRequestOperation.h>
 #include <ldap/UnbindRequestOperation.h>
 
 namespace Flix {
@@ -44,6 +45,9 @@ GenericOperation* GenericOperation::fromAsnOneObject(GenericAsnOneObject* asnOne
         break;
     case AsnOneObjectType::LDAP_UNBIND_REQUEST:
         operation = UnbindRequestOperation::fromAsnOneObject(LdapUnbindRequestAsnOneObject::castObject(asnOneObject));
+        break;
+    case AsnOneObjectType::LDAP_SEARCH_REQUEST:
+        operation = SearchRequestOperation::fromAsnOneObject(LdapSearchRequestAsnOneObject::castObject(asnOneObject));
         break;
     default:
         break;

@@ -12,6 +12,8 @@ libldap_la_SOURCES = \
 	BindResponseOperation.h \
     LdapMessage.cpp \
     LdapMessage.h \
+	SearchRequestOperation.cpp \
+	SearchRequestOperation.h \
 	UnbindRequestOperation.cpp \
 	UnbindRequestOperation.h
 

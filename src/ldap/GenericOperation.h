@@ -17,12 +17,26 @@ enum class OperationType {
     BIND_REQUEST,
     BIND_RESPONSE,
     UNBIND_REQUEST,
+    SEARCH_REQUEST,
 };
 
 enum class OperationResult {
     SUCCESS = 0,
     INVALID_CREDENTIALS = 49,
     OTHER = 80,
+};
+
+enum class SearchScope {
+    BASE = 0,
+    ONE = 1,
+    SUBTREE = 2,
+};
+
+enum class DereferenceAliases {
+    NEVER = 0,
+    IN_SEARCHING = 1,
+    FINDING_BASE_OBJECT = 2,
+    ALWAYS = 3,
 };
 
 class GenericOperation {
