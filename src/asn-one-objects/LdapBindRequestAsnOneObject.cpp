@@ -5,8 +5,8 @@
  *      Author: felix
  */
 
-#include <asn-one-objects/LdapBindRequestAsnOneObject.h>
 #include <cassert>
+#include <asn-one-objects/LdapBindRequestAsnOneObject.h>
 #include <common/Log.h>
 
 namespace Flix {
