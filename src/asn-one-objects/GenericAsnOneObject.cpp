@@ -5,9 +5,12 @@
  *      Author: felix
  */
 
+#include <asn-one-objects/BooleanAsnOneObject.h>
+#include <asn-one-objects/EnumeratedAsnOneObject.h>
 #include <asn-one-objects/GenericAsnOneObject.h>
 #include <asn-one-objects/IntegerAsnOneObject.h>
 #include <asn-one-objects/LdapBindRequestAsnOneObject.h>
+#include <asn-one-objects/LdapSearchRequestAsnOneObject.h>
 #include <asn-one-objects/LdapUnbindRequestAsnOneObject.h>
 #include <asn-one-objects/OctetStringAsnOneObject.h>
 #include <asn-one-objects/SequenceAsnOneObject.h>
@@ -173,23 +176,28 @@ GenericAsnOneObject* GenericAsnOneObject::decode(const StreamBuffer& buffer, ssi
     LOG_DEBUG("pduClass=" << pduClass << ", pduCombinedFlag=" << pduCombinedFlag << ", pduType=" << pduType);
 
     StreamBuffer subsetBuffer(buffer.cbegin() + alreadyConsumedBytes, buffer.cbegin() + alreadyConsumedBytes + length);
-//    LOG_DEBUG("subsetBuffer.size()=" << subsetBuffer.size());
     GenericAsnOneObject* asnOneObject = nullptr;
     decodeStatus = AsnOneDecodeStatus::INVALID_TAG;
 
     if (pduClass == PDU_CLASS_UNIVERSAL) {
-        if (pduCombinedFlag && pduType == PDU_TYPE_UNIVERSAL_SEQUENCE) {
+        if (!pduCombinedFlag && pduType == PDU_TYPE_UNIVERSAL_BOOLEAN) {
+            asnOneObject = BooleanAsnOneObject::decode(subsetBuffer, decodeStatus);
+        } else if (pduCombinedFlag && pduType == PDU_TYPE_UNIVERSAL_SEQUENCE) {
             asnOneObject = SequenceAsnOneObject::decode(subsetBuffer, decodeStatus);
         } else if (!pduCombinedFlag && pduType == PDU_TYPE_UNIVERSAL_INTEGER) {
             asnOneObject = IntegerAsnOneObject::decode(subsetBuffer, decodeStatus);
         } else if (!pduCombinedFlag && pduType == PDU_TYPE_UNIVERSAL_OCTET_STRING) {
             asnOneObject = OctetStringAsnOneObject::decode(subsetBuffer, decodeStatus);
+        } else if (!pduCombinedFlag && pduType == PDU_TYPE_UNIVERSAL_ENUMERATED) {
+            asnOneObject = EnumeratedAsnOneObject::decode(subsetBuffer, decodeStatus);
         }
     } else if (pduClass == PDU_CLASS_APPLICATION) {
         if (pduCombinedFlag && pduType == PDU_TYPE_APPLICATION_LDAP_BIND_REQUEST) {
             asnOneObject = LdapBindRequestAsnOneObject::decode(subsetBuffer, decodeStatus);
         } else if (!pduCombinedFlag && pduType == PDU_TYPE_APPLICATION_LDAP_UNBIND_REQUEST) {
             asnOneObject = LdapUnbindRequestAsnOneObject::decode(subsetBuffer, decodeStatus);
+        } else if (pduCombinedFlag && pduType == PDU_TYPE_APPLICATION_LDAP_SEARCH_REQUEST) {
+            asnOneObject = LdapSearchRequestAsnOneObject::decode(subsetBuffer, decodeStatus);
         }
     } else if (pduClass == PDU_CLASS_CONTEXT) {
         if (!pduCombinedFlag && pduType == PDU_TYPE_CONTEXT_LDAP_BIND_CREDENTIAL) {
