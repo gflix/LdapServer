@@ -20,19 +20,6 @@
 #define PDU_COMBINED_MASK (0x01)
 #define PDU_TYPE_MASK (0x1f)
 
-#define PDU_CLASS_UNIVERSAL (0)
-#define PDU_CLASS_APPLICATION (1)
-#define PDU_CLASS_CONTEXT (2)
-
-#define PDU_TYPE_UNIVERSAL_INTEGER (2)
-#define PDU_TYPE_UNIVERSAL_OCTET_STRING (4)
-#define PDU_TYPE_UNIVERSAL_SEQUENCE (16)
-
-#define PDU_TYPE_APPLICATION_LDAP_BIND_REQUEST (0)
-#define PDU_TYPE_APPLICATION_LDAP_BIND_RESPONSE (1)
-
-#define PDU_TYPE_CONTEXT_LDAP_BIND_CREDENTIAL (0)
-
 namespace Flix {
 
 GenericAsnOneObject::GenericAsnOneObject(AsnOneObjectType type):
@@ -101,6 +88,32 @@ void GenericAsnOneObject::appendSubObject(GenericAsnOneObject* subObject)
     if (subObject) {
         subObjects.push_back(subObject);
     }
+}
+
+StreamBuffer GenericAsnOneObject::addAsnOneHeader(int pduClass, bool pduCombinedFlag, int pduType, const StreamBuffer& payload) const
+{
+    StreamBuffer pdu;
+    int rawPduTag =
+        (pduClass & PDU_CLASS_MASK) << PDU_CLASS_SHIFT |
+        (pduCombinedFlag ? (1 << PDU_COMBINED_SHIFT) : 0) |
+        (pduType & PDU_TYPE_MASK);
+
+    pdu.push_back((unsigned char) rawPduTag);
+
+    int length = payload.size();
+    if (length <= 127) {
+        pdu.push_back((unsigned char) length);
+    } else {
+        pdu.push_back(0x84);
+        pdu.push_back((length >> 24) & 0xff);
+        pdu.push_back((length >> 16) & 0xff);
+        pdu.push_back((length >> 8) & 0xff);
+        pdu.push_back(length & 0xff);
+    }
+
+    pdu.push_back(payload);
+
+    return pdu;
 }
 
 GenericAsnOneObject* GenericAsnOneObject::decode(const StreamBuffer& buffer, ssize_t& consumedBytes, AsnOneDecodeStatus& decodeStatus)

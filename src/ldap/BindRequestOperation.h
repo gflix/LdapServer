@@ -22,7 +22,6 @@ public:
     const std::string& getAuthenticationDn(void) const;
     const std::string& getPassword(void) const;
     virtual std::string dump(void) const;
-    virtual StreamBuffer getBuffer(void) const;
 
     void setProtocolVersion(int protocolVersion);
     void setAuthenticationDn(const std::string& authenticationDn);

@@ -27,7 +27,6 @@ public:
     bool isType(OperationType requestedType) const;
 
     virtual std::string dump(void) const = 0;
-    virtual StreamBuffer getBuffer(void) const = 0;
 
     static GenericOperation* fromAsnOneObject(GenericAsnOneObject* asnOneObject);
     friend std::ostream& operator<<(std::ostream& stream, const GenericOperation& operation);

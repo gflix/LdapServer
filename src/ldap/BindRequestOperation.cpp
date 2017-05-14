@@ -48,11 +48,6 @@ std::string BindRequestOperation::dump(void) const
     return dumpedOperation.str();
 }
 
-StreamBuffer BindRequestOperation::getBuffer(void) const
-{
-    return {};
-}
-
 void BindRequestOperation::setProtocolVersion(int protocolVersion)
 {
     this->protocolVersion = protocolVersion;

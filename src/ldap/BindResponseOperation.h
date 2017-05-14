@@ -18,7 +18,6 @@ public:
     virtual ~BindResponseOperation();
 
     virtual std::string dump(void) const;
-    virtual StreamBuffer getBuffer(void) const;
 };
 
 } /* namespace Flix */

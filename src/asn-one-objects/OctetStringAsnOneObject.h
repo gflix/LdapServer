@@ -20,16 +20,16 @@ public:
 
     const std::string& getValue(void) const;
 
+    void setValue(const std::string& value);
+
     static OctetStringAsnOneObject* decode(StreamBuffer buffer, AsnOneDecodeStatus& decodeStatus);
     static OctetStringAsnOneObject* castObject(GenericAsnOneObject* object);
 
-protected:
-    std::string dump(void) const;
+    virtual StreamBuffer serialize(void) const;
+    virtual std::string dump(void) const;
 
 private:
     std::string value;
-
-    void setValue(const std::string& value);
 };
 
 } /* namespace Flix */

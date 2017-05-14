@@ -94,28 +94,6 @@ void TcpConnection::handleIncomingData(const StreamBuffer& stream)
 
             if (ldapMessage) {
                 LOG_DEBUG(*ldapMessage);
-
-                if (ldapMessage->isOperationType(OperationType::BIND_REQUEST)) {
-                    LdapMessage* responseLdapMessage = new LdapMessage();
-                    BindResponseOperation* operation = new BindResponseOperation();
-
-                    responseLdapMessage->setMessageId(ldapMessage->getMessageId());
-                    responseLdapMessage->setOperation(operation);
-
-                    StreamBuffer responseBuffer = responseLdapMessage->getBuffer();
-                    unsigned char buffer[128];
-                    while (responseBuffer.size() > 0) {
-                        ssize_t bytesRead = responseBuffer.get(buffer, sizeof(buffer));
-                        if (bytesRead <= 0) {
-                            close();
-                            quitImmediately = true;
-                            break;
-                        }
-                        send(connectionSocket, buffer, bytesRead, 0);
-                    }
-                    delete responseLdapMessage;
-                }
-
                 LOG_INFO("Cleaning up LDAP message...");
                 delete ldapMessage;
             } else {

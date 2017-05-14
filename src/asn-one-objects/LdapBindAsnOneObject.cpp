@@ -5,6 +5,7 @@
  *      Author: felix
  */
 
+#include <cassert>
 #include <asn-one-objects/LdapBindAsnOneObject.h>
 #include <common/Log.h>
 
@@ -56,6 +57,13 @@ LdapBindAsnOneObject* LdapBindAsnOneObject::decode(StreamBuffer buffer, AsnOneDe
 LdapBindAsnOneObject* LdapBindAsnOneObject::castObject(GenericAsnOneObject* object)
 {
     return static_cast<LdapBindAsnOneObject*>(object);
+}
+
+StreamBuffer LdapBindAsnOneObject::serialize(void) const
+{
+    // not supported
+    assert(false);
+    return {};
 }
 
 std::string LdapBindAsnOneObject::dump(void) const

@@ -5,6 +5,8 @@
  *      Author: felix
  */
 
+#include <iomanip>
+#include <common/Log.h>
 #include <common/StreamBuffer.h>
 
 namespace Flix {
@@ -66,6 +68,23 @@ void StreamBuffer::push_back(const StreamBuffer& elements)
 void StreamBuffer::push_back(unsigned char value)
 {
     std::vector<unsigned char>::push_back(value);
+}
+
+void StreamBuffer::dump(void) const
+{
+    std::stringstream dumpStream;
+
+    bool firstElement = true;
+    for (auto element = cbegin(); element != cend(); ++element) {
+        if (firstElement) {
+            firstElement = false;
+        } else {
+            dumpStream << ", ";
+        }
+        dumpStream << std::hex << std::setw(2) << std::setfill('0') << (int) *element;
+    }
+
+    LOG_DEBUG("StreamBuffer[" << dumpStream.str() << "]");
 }
 
 } /* namespace Flix */

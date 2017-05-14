@@ -31,6 +31,18 @@ SequenceAsnOneObject* SequenceAsnOneObject::decode(StreamBuffer buffer, AsnOneDe
     return asnOneObject;
 }
 
+StreamBuffer SequenceAsnOneObject::serialize(void) const
+{
+    StreamBuffer payload;
+    for (auto& subObject: subObjects) {
+        if (!subObject) {
+            continue;
+        }
+        payload.push_back(subObject->serialize());
+    }
+
+    return addAsnOneHeader(PDU_CLASS_UNIVERSAL, true, PDU_TYPE_UNIVERSAL_SEQUENCE, payload);
+}
 
 std::string SequenceAsnOneObject::dump(void) const
 {

@@ -53,6 +53,19 @@ IntegerAsnOneObject* IntegerAsnOneObject::castObject(GenericAsnOneObject* object
     return static_cast<IntegerAsnOneObject*>(object);
 }
 
+StreamBuffer IntegerAsnOneObject::serialize(void) const
+{
+    StreamBuffer payload;
+
+    int tempValue = value;
+    do {
+        payload.insert(payload.begin(), tempValue & 0xff);
+        tempValue = tempValue >> 8;
+    } while (tempValue != 0);
+
+    return addAsnOneHeader(PDU_CLASS_UNIVERSAL, false, PDU_TYPE_UNIVERSAL_INTEGER, payload);
+}
+
 std::string IntegerAsnOneObject::dump(void) const
 {
     return "Integer(" + std::to_string(value) + ")";

@@ -19,8 +19,8 @@ public:
 
     static SequenceAsnOneObject* decode(StreamBuffer buffer, AsnOneDecodeStatus& decodeStatus);
 
-protected:
-    std::string dump(void) const;
+    virtual StreamBuffer serialize(void) const;
+    virtual std::string dump(void) const;
 };
 
 } /* namespace Flix */

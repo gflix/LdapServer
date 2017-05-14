@@ -28,20 +28,4 @@ std::string BindResponseOperation::dump(void) const
     return dumpedOperation.str();
 }
 
-StreamBuffer BindResponseOperation::getBuffer(void) const
-{
-    StreamBuffer buffer;
-    buffer.push_back(0x61);
-    buffer.push_back(0x07);
-    buffer.push_back(0x0a);
-    buffer.push_back(0x01);
-    buffer.push_back(0x00);
-    buffer.push_back(0x04);
-    buffer.push_back(0x00);
-    buffer.push_back(0x04);
-    buffer.push_back(0x00);
-
-    return buffer;
-}
-
 } /* namespace Flix */

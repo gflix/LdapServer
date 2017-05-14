@@ -52,6 +52,17 @@ OctetStringAsnOneObject* OctetStringAsnOneObject::castObject(GenericAsnOneObject
     return static_cast<OctetStringAsnOneObject*>(object);
 }
 
+StreamBuffer OctetStringAsnOneObject::serialize(void) const
+{
+    StreamBuffer payload;
+
+    for (auto& character: value) {
+        payload.push_back(character);
+    }
+
+    return addAsnOneHeader(PDU_CLASS_UNIVERSAL, false, PDU_TYPE_UNIVERSAL_OCTET_STRING, payload);
+}
+
 std::string OctetStringAsnOneObject::dump(void) const
 {
     return "OctetString(" + value + ")";

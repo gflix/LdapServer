@@ -12,6 +12,19 @@
 #include <vector>
 #include <common/StreamBuffer.h>
 
+#define PDU_CLASS_UNIVERSAL (0)
+#define PDU_CLASS_APPLICATION (1)
+#define PDU_CLASS_CONTEXT (2)
+
+#define PDU_TYPE_UNIVERSAL_INTEGER (2)
+#define PDU_TYPE_UNIVERSAL_OCTET_STRING (4)
+#define PDU_TYPE_UNIVERSAL_SEQUENCE (16)
+
+#define PDU_TYPE_APPLICATION_LDAP_BIND_REQUEST (0)
+#define PDU_TYPE_APPLICATION_LDAP_BIND_RESPONSE (1)
+
+#define PDU_TYPE_CONTEXT_LDAP_BIND_CREDENTIAL (0)
+
 namespace Flix {
 
 enum class AsnOneObjectType {
@@ -44,6 +57,10 @@ public:
     bool isType(AsnOneObjectType requestedType) const;
     int getSubObjectCount(void) const;
     GenericAsnOneObject* getSubObject(int subObject) const;
+
+    void appendSubObject(GenericAsnOneObject* subObject);
+
+    virtual StreamBuffer serialize(void) const = 0;
     virtual std::string dump(void) const = 0;
 
     static GenericAsnOneObject* decode(const StreamBuffer& buffer, ssize_t& consumedBytes, AsnOneDecodeStatus& decodeStatus);
@@ -54,7 +71,8 @@ protected:
     AsnOneObjects subObjects;
 
     bool decodeSequence(StreamBuffer buffer, AsnOneDecodeStatus& decodeStatus);
-    void appendSubObject(GenericAsnOneObject* subObject);
+
+    StreamBuffer addAsnOneHeader(int pduClass, bool pduCombinedFlag, int pduType, const StreamBuffer& payload) const;
 };
 
 std::ostream& operator<<(std::ostream& stream, AsnOneDecodeStatus decodeStatus);

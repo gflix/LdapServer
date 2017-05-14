@@ -19,16 +19,16 @@ public:
 
     int getValue(void) const;
 
+    void setValue(int value);
+
     static IntegerAsnOneObject* decode(StreamBuffer buffer, AsnOneDecodeStatus& decodeStatus);
     static IntegerAsnOneObject* castObject(GenericAsnOneObject* object);
 
-protected:
-    std::string dump(void) const;
+    virtual StreamBuffer serialize(void) const;
+    virtual std::string dump(void) const;
 
 private:
     int value;
-
-    void setValue(int value);
 };
 
 } /* namespace Flix */

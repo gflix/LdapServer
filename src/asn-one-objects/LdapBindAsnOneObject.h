@@ -22,8 +22,8 @@ public:
     static LdapBindAsnOneObject* decode(StreamBuffer buffer, AsnOneDecodeStatus& decodeStatus);
     static LdapBindAsnOneObject* castObject(GenericAsnOneObject* object);
 
-protected:
-    std::string dump(void) const;
+    virtual StreamBuffer serialize(void) const;
+    virtual std::string dump(void) const;
 };
 
 } /* namespace Flix */
