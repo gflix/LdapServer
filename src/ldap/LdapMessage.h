@@ -9,11 +9,16 @@
 #define SRC_LDAP_LDAPMESSAGE_H_
 
 #include <ostream>
+#include <list>
 #include <string>
 #include <asn-one-objects/GenericAsnOneObject.h>
 #include <ldap/GenericOperation.h>
 
 namespace Flix {
+
+class LdapMessage;
+
+typedef std::list<LdapMessage*> LdapMessages;
 
 class LdapMessage {
 public:
@@ -24,7 +29,7 @@ public:
     GenericOperation* getOperation(void) const;
     bool isOperationType(OperationType requestedType) const;
 
-    LdapMessage* execute(void) const;
+    LdapMessages execute(void) const;
 
     GenericAsnOneObject* getAsnOneObject(void) const;
     std::string dump(void) const;

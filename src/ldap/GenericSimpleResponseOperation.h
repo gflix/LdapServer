@@ -25,7 +25,7 @@ public:
     void setMatchedDn(const std::string& matchedDn);
     void setDiagnosticMessage(const std::string& diagnosticMessage);
 
-    virtual GenericOperation* execute(void) const;
+    virtual Operations execute(void) const;
 
     virtual GenericAsnOneObject* getAsnOneObject(void) const = 0;
     virtual std::string dump(void) const = 0;

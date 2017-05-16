@@ -43,23 +43,29 @@ bool LdapMessage::isOperationType(OperationType requestedType) const
     return operation->isType(requestedType);
 }
 
-LdapMessage* LdapMessage::execute(void) const
+LdapMessages LdapMessage::execute(void) const
 {
     if (!operation) {
-        return nullptr;
+        return {};
     }
 
-    LdapMessage* ldapResponseMessage = new LdapMessage();
-    ldapResponseMessage->setMessageId(messageId);
-
-    GenericOperation* responseOperation = operation->execute();
-    if (!responseOperation) {
-        delete ldapResponseMessage;
-        return nullptr;
+    Operations responseOperations = operation->execute();
+    if (responseOperations.empty()) {
+        return {};
     }
-    ldapResponseMessage->setOperation(responseOperation);
+    LdapMessages ldapResponseMessages;
+    for (auto& responseOperation: responseOperations) {
+        if (!responseOperation) {
+            continue;
+        }
+        LdapMessage* ldapResponseMessage = new LdapMessage();
+        ldapResponseMessage->setMessageId(messageId);
+        ldapResponseMessage->setOperation(responseOperation);
 
-    return ldapResponseMessage;
+        ldapResponseMessages.push_back(ldapResponseMessage);
+    }
+
+    return ldapResponseMessages;
 }
 
 GenericAsnOneObject* LdapMessage::getAsnOneObject(void) const

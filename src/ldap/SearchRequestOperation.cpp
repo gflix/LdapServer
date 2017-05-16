@@ -87,13 +87,13 @@ void SearchRequestOperation::setOnlyTypesFlag(bool onlyTypesFlag)
     this->onlyTypesFlag = onlyTypesFlag;
 }
 
-GenericOperation* SearchRequestOperation::execute(void) const
+Operations SearchRequestOperation::execute(void) const
 {
     SearchResultDoneOperation* operation = new SearchResultDoneOperation();
 
     operation->setResult(OperationResult::SUCCESS);
 
-    return operation;
+    return { operation };
 }
 
 GenericAsnOneObject* SearchRequestOperation::getAsnOneObject(void) const

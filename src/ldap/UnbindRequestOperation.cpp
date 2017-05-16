@@ -19,9 +19,9 @@ UnbindRequestOperation::~UnbindRequestOperation()
 {
 }
 
-GenericOperation* UnbindRequestOperation::execute(void) const
+Operations UnbindRequestOperation::execute(void) const
 {
-    return nullptr;
+    return {};
 }
 
 GenericAsnOneObject* UnbindRequestOperation::getAsnOneObject(void) const

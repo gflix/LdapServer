@@ -94,8 +94,8 @@ void TcpConnection::handleIncomingData(const StreamBuffer& stream)
 
             if (ldapMessage) {
                 LOG_INFO("Request: " << *ldapMessage);
-                LdapMessage* ldapResponseMessage = ldapMessage->execute();
-                if (!ldapResponseMessage) {
+                LdapMessages ldapResponseMessages = ldapMessage->execute();
+                if (ldapResponseMessages.empty()) {
                     if (ldapMessage->isOperationType(OperationType::UNBIND_REQUEST)) {
                         LOG_NOTICE("Received LDAP unbind request. Closing connection...");
                     } else {
@@ -104,19 +104,24 @@ void TcpConnection::handleIncomingData(const StreamBuffer& stream)
                     close();
                     quitImmediately = true;
                 } else {
-                    LOG_INFO("Response: " << *ldapResponseMessage);
+                    for (auto& ldapResponseMessage: ldapResponseMessages) {
+                        if (!ldapResponseMessage) {
+                            continue;
+                        }
+                        LOG_INFO("Response: " << *ldapResponseMessage);
 
-                    GenericAsnOneObject* responseObject = ldapResponseMessage->getAsnOneObject();
-                    assert(responseObject);
-                    StreamBuffer responseBuffer = responseObject->serialize();
+                        GenericAsnOneObject* responseObject = ldapResponseMessage->getAsnOneObject();
+                        assert(responseObject);
+                        StreamBuffer responseBuffer = responseObject->serialize();
 
-                    if (!sendData(responseBuffer)) {
-                        close();
-                        quitImmediately = true;
+                        if (!sendData(responseBuffer)) {
+                            close();
+                            quitImmediately = true;
+                        }
+
+                        delete responseObject;
+                        delete ldapResponseMessage;
                     }
-
-                    delete responseObject;
-                    delete ldapResponseMessage;
                 }
 
                 LOG_DEBUG("Cleaning up LDAP message...");

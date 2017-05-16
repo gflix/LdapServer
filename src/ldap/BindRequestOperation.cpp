@@ -39,7 +39,7 @@ const std::string& BindRequestOperation::getPassword(void) const
     return password;
 }
 
-GenericOperation* BindRequestOperation::execute(void) const
+Operations BindRequestOperation::execute(void) const
 {
     BindResponseOperation* operation = new BindResponseOperation();
 
@@ -51,7 +51,7 @@ GenericOperation* BindRequestOperation::execute(void) const
         operation->setDiagnosticMessage("Invalid credentials");
     }
 
-    return operation;
+    return { operation };
 }
 
 GenericAsnOneObject* BindRequestOperation::getAsnOneObject(void) const

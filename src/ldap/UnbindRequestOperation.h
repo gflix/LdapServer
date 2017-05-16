@@ -18,7 +18,7 @@ public:
     UnbindRequestOperation();
     virtual ~UnbindRequestOperation();
 
-    virtual GenericOperation* execute(void) const;
+    virtual Operations execute(void) const;
 
     virtual GenericAsnOneObject* getAsnOneObject(void) const;
     virtual std::string dump(void) const;

@@ -22,7 +22,7 @@ public:
     const std::string& getAuthenticationDn(void) const;
     const std::string& getPassword(void) const;
 
-    virtual GenericOperation* execute(void) const;
+    virtual Operations execute(void) const;
 
     virtual GenericAsnOneObject* getAsnOneObject(void) const;
     virtual std::string dump(void) const;

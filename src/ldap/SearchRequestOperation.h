@@ -32,7 +32,7 @@ public:
     void setTimeLimit(int timeLimit);
     void setOnlyTypesFlag(bool onlyTypesFlag);
 
-    virtual GenericOperation* execute(void) const;
+    virtual Operations execute(void) const;
 
     virtual GenericAsnOneObject* getAsnOneObject(void) const;
     virtual std::string dump(void) const;

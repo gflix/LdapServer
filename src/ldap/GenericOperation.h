@@ -8,6 +8,7 @@
 #ifndef SRC_LDAP_GENERICOPERATION_H_
 #define SRC_LDAP_GENERICOPERATION_H_
 
+#include <list>
 #include <asn-one-objects/GenericAsnOneObject.h>
 
 namespace Flix {
@@ -40,6 +41,10 @@ enum class DereferenceAliases {
     ALWAYS = 3,
 };
 
+class GenericOperation;
+
+typedef std::list<GenericOperation*> Operations;
+
 class GenericOperation {
 public:
     GenericOperation(OperationType type);
@@ -48,7 +53,7 @@ public:
     OperationType getType(void) const;
     bool isType(OperationType requestedType) const;
 
-    virtual GenericOperation* execute(void) const = 0;
+    virtual Operations execute(void) const = 0;
 
     virtual GenericAsnOneObject* getAsnOneObject(void) const = 0;
     virtual std::string dump(void) const = 0;

@@ -53,11 +53,11 @@ void GenericSimpleResponseOperation::setDiagnosticMessage(const std::string& dia
     this->diagnosticMessage = diagnosticMessage;
 }
 
-GenericOperation* GenericSimpleResponseOperation::execute(void) const
+Operations GenericSimpleResponseOperation::execute(void) const
 {
     // Not supported
     assert(false);
-    return nullptr;
+    return {};
 }
 
 GenericAsnOneObject* GenericSimpleResponseOperation::getAsnOneObject(GenericAsnOneObject* asnObject) const
